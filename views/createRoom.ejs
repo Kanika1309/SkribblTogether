@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CreateRoom</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/user.css">
+
+</head>
+
+<body class="d-flex flex-column vh-100">
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">SKRIBBL TOGETHER</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link" href="/api/">Home</a>
+                    <a class="nav-link " href="/api/rules">Rules</a>
+                    <a class="nav-link " href="/api/profile/:userId">My Profile</a>
+                </div>
+                <div class="navbar-nav ms-auto">
+                        <!-- <a class="nav-link" href="/api/login">Login</a>
+                        <a class="nav-link" href="/api/register">Sign Up</a> -->
+                        <a class="nav-link" href="/api/logout">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container d-flex justify-content-center align-items-center mt-5">
+        <div class="row">
+            <div class="col-md-40 offset-md-1">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">CREATE ROOM</h5>
+                        <form action="/api/createRoom/:userId" method="POST" class="validated-form" novalidate>
+                            <div class="mb-3">
+                                <label class="form-label" for="noOfPlayers">NUMBER OF PLAYERS</label>
+                                <input class="form-control" type="number" id="noOfPlayers" name="noOfPlayers" autofocus min="2"
+                                    required>
+                                <div class="invalid-feedback">
+                                    Please enter players.
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="noOfRounds">NUMBER OF ROUNDS</label>
+                                <input class="form-control" type="number" id="noOfRounds" name="noOfRounds" min="1" required>
+                                <div class="invalid-feedback">
+                                    Please enter rounds.
+                                </div>
+                            </div>
+                            <button class="btn btn-success btn-block">CREATE</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <main class="container mt-5">
+        </main>
+        <footer class="footer bg-dark py-3 mt-auto">
+            <div class="container">
+                <span class="text-muted">&copy; SKRIBBL TOGETHER 2023</span>
+            </div>
+        </footer>
+</body>
+</html>

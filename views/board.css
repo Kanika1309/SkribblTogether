@@ -1,0 +1,88 @@
+body{
+    margin: 0;
+    padding:0;
+}
+
+.members {
+    border: 1px solid black;
+    border-width: 6px;
+    border-radius: 3px;
+    /* border-color: black; */
+    width: 90%;
+    margin-left: 80px;
+    margin-top: 7px;
+    height: 60px
+}
+
+.drawing-board {
+    border: 1px solid black;
+    border-width: 6px;
+    border-radius: 3px;
+    /* border-color: black; */
+    width: 90%;
+    margin-left: 80px;
+    margin-top: 3px;
+    height: 600px
+}
+
+.input {
+    border: 1px solid black;
+    border-width: 6px;
+    border-radius: 3px;
+    width: 90%;
+    margin-left: 80px;
+    margin-top: 3px;
+    height: 60px;
+    background-color:blueviolet;
+}
+
+.input * {
+    margin-right: 12px;
+    text-align: center;
+    margin-top: 7px;
+}
+
+.input #inputOption label{
+    font-size: 20px;
+    font-weight: bolder;
+    padding: 4px;
+    border: 1px solid gray;
+    border-width: 2px;
+    border-radius: 7px;
+    background-color:lightsteelblue;
+}
+
+.input input[type="text"]{
+    width: 40%;
+    height: 25px;
+}
+
+.input input[type="number"]{
+    width: 10%;
+    height: 20px;
+    border: 1px solid gray;
+    border-width: 3px;
+    border-radius: 3px;
+    font-size: 16px;
+}
+
+.input button{
+    width: 10%;
+    height: 30px;
+    border: 1px solid gray;
+    border-width: 2px;
+    border-radius: 7px;
+    background-color:lightsteelblue;
+    color:black;
+    font-size: 18px;
+    font-weight: bolder;
+}
+
+/* .members .buttons *{
+    align-content: center;
+} */
+/* .members .buttons button{
+    width: 5%;
+    height: 30px;
+    padding: 2px;
+} */
