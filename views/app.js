@@ -1,4 +1,3 @@
-// const io = require("socket.io-client");
 const canvas = document.getElementById('drawing-board');
 const clear = document.getElementById('inputOption');
 
@@ -8,7 +7,8 @@ const canvasOffsetY = canvas.offsetTop;
 canvas.width = window.innerWidth - canvasOffsetX;
 canvas.height = window.innerHeight - canvasOffsetY;
 
-var io = io.connect("http://localhost:7000/board.html")
+// var io = require("socket.io-client");
+var io = io.connect();
 
 const ctx = canvas.getContext('2d');
 

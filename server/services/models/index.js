@@ -60,8 +60,7 @@ let users= [
     }
 ]
 
-let rooms = [
-    {
+let rooms = {
         roomAdmin: {
             userKey: "0001",
             name: "user1",
@@ -74,43 +73,44 @@ let rooms = [
         roomLink: "link0001",
         noOfPlayers: 10,
         noOfRounds: 3,
-        teams: [
-            {
-                teamKey: "team1",
-                noOfMembers: 5,
-                members: [
-                    {
-                        userKey: "0001",
-                        name: "user1",
-                        rank: 1,
-                        history: {
-                            noOfGamesPlayed: 10,
-                            noOfGamesWins: 10
-                        }
-                    }
-                ],
-                teamTotalScore: 0
-            },
-            {
-                teamKey: "team2",
-                noOfMembers: 5,
-                members: [
-                    {
-                        userKey: "0002",
-                        name: "user2",
-                        rank: 2,
-                        history: {
-                            noOfGamesPlayed: 10,
-                            noOfGamesWins: 9
-                        }
-                    }
-                ],
-                teamTotalScore: 0
-            }
-        ],
-        rounds: []
+        players: [],
+        // teams: [
+        //     {
+        //         teamKey: "team1",
+        //         noOfMembers: 5,
+        //         members: [
+        //             {
+        //                 userKey: "0001",
+        //                 name: "user1",
+        //                 rank: 1,
+        //                 history: {
+        //                     noOfGamesPlayed: 10,
+        //                     noOfGamesWins: 10
+        //                 }
+        //             }
+        //         ],
+        //         teamTotalScore: 0
+        //     },
+        //     {
+        //         teamKey: "team2",
+        //         noOfMembers: 5,
+        //         members: [
+        //             {
+        //                 userKey: "0002",
+        //                 name: "user2",
+        //                 rank: 2,
+        //                 history: {
+        //                     noOfGamesPlayed: 10,
+        //                     noOfGamesWins: 9
+        //                 }
+        //             }
+        //         ],
+        //         teamTotalScore: 0
+        //     }
+        // ],
+        // rounds: [],
+        totalScore: 0
     }
-]
 
 let phrases = ["Barking on the wrong tree", "Kill two birds with one stone", "Born with a silver spoon in one's mouth"]
 
@@ -151,28 +151,29 @@ const Services = {
         return "link"+userKey;
     },
     createRoom: (roomAdmin, roomLink, noOfPlayers, noOfRounds) => {
-        const noOfMembers =  noOfPlayers%2 == 0 ? noOfPlayers/2 : noOfPlayers/2+1;
+        // const noOfMembers =  noOfPlayers%2 == 0 ? noOfPlayers/2 : noOfPlayers/2+1;
+        players = [users[0]]
         const room =  {
             roomAdmin,
             roomLink,
             noOfPlayers,
             noOfRounds,
-            teams: [{
-                teamKey: "team1",
-                noOfMembers,
-                members:[],
-                teamTotalScore: 0
-            },
-            {
-                teamKey: "team2",
-                noOfMembers,
-                members: [],
-                teamTotalScore: 0
-            }],
-            rounds: [],
-            winningTeam: TeamModel
+            players: players,
+            // teams: [{
+            //     teamKey: "team1",
+            //     noOfMembers,
+            //     members:[],
+            //     teamTotalScore: 0
+            // },
+            // {
+            //     teamKey: "team2",
+            //     noOfMembers,
+            //     members: [],
+            //     teamTotalScore: 0
+            // }],
+            // rounds: [],
+            totalScore: 5
         }
-        rooms.push(room)
         return rooms
         return RoomModel.create({
             roomAdmin,

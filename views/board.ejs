@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="board.css"> -->
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+            body{
+                margin: 0;
+                padding:0;
+            }
+            .members {
+                border: 0.2px solid black;
+                border-width: 4px;
+                border-radius: 3px;
+                width: 95%;
+                margin-left: 2%;
+                margin-right: 2%;
+                margin-top: 3px;
+                height: 40px;
+                display: flex
+            }
+            .members #member {
+                position: relative;
+                width: 25%;
+                border: 0.2px solid black;
+                text-align: center;
+                font-size: 30px;
+                font-style: normal;
+                color: black;
+                font-weight: bolder;
+            }
+            .phrase {
+                border: 0.2px solid black;
+                border-width: 4px;
+                border-radius: 3px;
+                width: 95%;
+                margin-left: 2%;
+                margin-right: 2%;
+                margin-top: 3px;
+                height: 30px;
+                font-size: 25px;
+                text-align: center;
+                font-style: normal;
+                color: black;
+                font-weight: bolder;
+                background-color:cadetblue;
+                display: none;
+            }
+            #drawing-board {
+                border: 0.2px solid black;
+                border-width: 4px;
+                border-radius: 3px;
+                width: 95%;
+                margin-left: 2%;
+                margin-right: 2%;
+                margin-top: 3px;
+                height: 540px;
+            }
+            .link {
+                border: 0.2px solid black;
+                border-width: 4px;
+                border-radius: 3px;
+                width: 95%;
+                margin-left: 2%;
+                margin-right: 2%;
+                height: 30px;
+                text-align: center;
+                background-color:rosybrown;
+            }
+            .link > a {
+                text-align: center;
+                text-decoration: none;
+                font-size: x-large;
+                font-style: normal;
+                color: black;
+                font-weight: bolder;
+            }
+            .input {
+                border: 0.2px solid black;
+                border-width: 4px;
+                border-radius: 3px;
+                width: 95%;
+                margin-left: 2%;
+                margin-right: 2%;
+                margin-top: 3px;
+                height: 50px;
+                background-color:blueviolet;
+            }
+            .input * {
+                padding: 5px;
+                text-align: center;
+            }
+            .input button{
+                width: 8%;
+                height: 40px;
+                border: 1px solid black;
+                border-width: 2px;
+                border-radius: 7px;
+                color:black;
+                font-size: 20px;
+                font-weight: bolder
+            }
+            .input button[type="clear"]{
+                background-color:bisque;
+                margin-right: 20px;
+                display: none;
+            }
+            .input button[type="start"]{
+                background-color:darkcyan;
+                margin-left: 40px;
+                display: inline;
+            }
+            .input button[type="submit"]{
+                background-color:crimson;
+                display: none;
+            }
+            .input #guessLabel{
+                font-size: 20px;
+                font-weight: bolder;
+                padding: 4px;
+                border: 1px solid gray;
+                border-width: 2px;
+                border-radius: 7px;
+                background-color:lightsteelblue;
+                display: none;
+            }
+            .input #guess{
+                width: 25%;
+                height: 20px;
+                display: none;
+            }
+    </style>
+    <title>Board</title>
+</head>
+<body>
+    <div class="members">
+        <% for(var i=0; i<members.length; i++) { %>
+            <div id="member"><%= members[i] %></div>
+        <% } %>
+    </div>
+    <div class="phrase"><%= phrase %></div>
+    <div class="drawing-board">
+        <canvas id="drawing-board"></canvas>
+    </div>
+    <div class="link">
+        <a href="http://localhost:7000/api/createRoom/:userId">ROOM LINK</a>
+    </div>
+    <div class="input">
+        <div id="inputOption">
+            <button id="clear" type="clear" >CLEAR</button>
+            <label id="guessLabel" for="guess">GUESS</label>
+            <input id="guess" type="text" placeholder="Guess the phrase.">
+            <!-- <label for="linewidth">LINEWIDTH</label>
+            <input id="linewidth" name='linewidth' type="number" value="5"> -->
+            <% if(roomAdmin!= null) { %>
+            <button id="start" type="start" formaction="" class="btn btn-success">START</button>
+            <% } %>
+            <button id="submit" type="submit" visiblity="hidden" formaction="" class="btn btn-success">SUBMIT</button>
+        </div>
+    </div>
+    <!-- <script src="../app.js"></script> -->
+    <script>
+            const canvas = document.getElementById('drawing-board');
+            const inputOption = document.getElementById('inputOption');
+            const phrase = document.querySelector('.phrase');
+            const clear = document.querySelector('#clear');
+            const guessLabel = document.querySelector('#guessLabel');
+            const guess = document.querySelector('#guess');
+            const start = document.querySelector('#start');
+            const submit = document.querySelector('#submit');
+
+            const canvasOffsetX = canvas.offsetLeft;
+            const canvasOffsetY = canvas.offsetTop;
+            canvas.width = window.innerWidth - canvasOffsetX;
+            canvas.height = window.innerHeight - canvasOffsetY;
+            // var io = require("socket.io-client");
+            var io = io.connect();
+
+            const ctx = canvas.getContext('2d');
+
+            let isPainting = false;
+            let lineWidth = 5;
+            let startX;
+            let startY;
+
+            io.on("onclear", ({w, h}) => {
+                ctx.clearRect(0, 0, w, h);
+            })
+            io.on("start", (data) => {
+                alert(data);
+                phrase.style.display="block";
+                clear.style.display="inline-block";
+            })
+            io.on("self", () => {
+                start.style.display="none";
+                guessLabel.style.display="inline-block";
+                guess.style.display="inline-block";
+                submit.style.display="inline-block";
+            })
+            inputOption.addEventListener('click', e => {
+                if (e.target.id === 'clear') {
+                    w = canvas.width;
+                    h =  canvas.height;
+                    io.emit("clear", { w, h });
+                    ctx.clearRect(0, 0, w, h);
+                }
+                if (e.target.id === 'start') {
+                    io.emit("start","game stated!")
+                }
+            });
+
+            io.on("ondown", () => {
+                isPainting = true;
+                // console.log("on2down")
+            })
+
+            canvas.addEventListener('mousedown', (e) => {
+                isPainting = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                // console.log("down2")
+                io.emit("down");
+            });
+
+            io.on("onup", () => {
+                isPainting = false;
+                ctx.stroke();
+                ctx.beginPath();
+                // console.log("onup2")
+            })
+
+            canvas.addEventListener('mouseup', e => {
+                isPainting = false;
+                // console.log("up2")
+                io.emit("up");
+                ctx.stroke();
+                ctx.beginPath();
+            });
+
+            io.on("ondraw", ({x, y}) => {
+                // console.log(x,y)
+                ctx.lineWidth = lineWidth;
+                ctx.lineCap = 'round';
+                ctx.lineTo(x, y);
+                ctx.stroke();
+            })
+
+            canvas.addEventListener('mousemove', (e) => {
+                if(!isPainting) {
+                    return;
+                }
+
+                x = e.clientX;
+                y = e.clientY;
+                ctx.lineWidth = lineWidth;
+                ctx.lineCap = 'round';
+
+                io.emit("draw", { x, y});
+                ctx.lineTo(x, y);
+                ctx.stroke();
+            });
+
+    </script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script> -->
+</body>
+</html>

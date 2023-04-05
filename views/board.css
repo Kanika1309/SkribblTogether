@@ -25,6 +25,27 @@ body{
     height: 600px
 }
 
+.link {
+    border: 1px solid black;
+    border-width: 6px;
+    border-radius: 3px;
+    width: 90%;
+    margin-left: 80px;
+    margin-top: 3px;
+    height: 60px;
+    background-color:rosybrown;
+}
+
+.link > a {
+    text-align: center;
+    text-decoration: none;
+    font-size: 99%;
+    font-style: normal;
+    color: black;
+    font-weight: bolder;
+    margin-bottom: 3px;
+}
+
 .input {
     border: 1px solid black;
     border-width: 6px;

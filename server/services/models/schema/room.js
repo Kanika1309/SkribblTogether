@@ -16,10 +16,10 @@ const Room = new mongoose.Schema({
     //     type: String,
     //     ref: 'team'
     // }],
-    rounds: [{
-        type: String,
-        ref: 'round'
-    }],
+    // rounds: [{
+    //     type: String,
+    //     ref: 'round'
+    // }],
     totalScore: Number
     // winningTeam: {
     //     type: String,

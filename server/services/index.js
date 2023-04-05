@@ -7,65 +7,6 @@ const { UserModel } = require('./models/schema/user');
 const publicPath = path.join(__dirname + '../' + '../' + '../draw/draw.html');
 
 // Router.use(express.static(publicPath));
-// const http = require("http").createServer(Router);
-// const io = require("socket.io")(http);
-
-// let players = []
-// io
-//     .of("draw.html")
-//     .on("connect", (socket) => {
-//         // console.log("new ");
-//         players.push(socket)
-//         console.log(`${socket.id} has connected.`)
-//         socket.emit("welcome", "Have Fun!");
-
-//     socket.on("draw", (data) => {
-//         // console.log(data)
-//         players.forEach(con => {
-//             if(con.id !== socket.id){
-//                 // console.log({x: data.x, y: data.y});
-//                 io.of("board.html")
-//                     return con.emit("ondraw", {x: data.x, y: data.y})
-//             }
-//         });
-//     });
-
-//     socket.on("down", () => {
-//         // console.log("down")
-//         players.forEach(con => {
-//             if(con.id !== socket.id){
-//                 // console.log("ondown");
-//                 io.of("board.html")
-//                     return con.emit("ondown")
-//             }
-//         })
-//     })
-
-//     socket.on("up", () => {
-//         // console.log("up")
-//         players.forEach(con => {
-//             if(con.id !== socket.id){
-//                 // console.log("onup");
-//                 io.of("board.html")
-//                     return con.emit("onup")
-//             }
-//         })
-//     })
-
-//     socket.on("clear", (data) => {
-//         players.forEach(con => {
-//             if(con.id !== socket.id){
-//                 io.of("board.html")
-//                     return con.emit("onclear", {w: data.w, h: data.h})
-//             }
-//         })
-//     })
-
-//     socket.on("disconnect", (reason) => {
-//         console.log(`${socket.id} has disconnected.`)
-//         players = players.filter(con => con.id != socket.id);
-//     });
-// });
 
 Router.get('/', async (req,res) => {
   res.render('home');
@@ -78,11 +19,12 @@ Router.get("/register", async (req,res) => {
 Router.post('/register', async  (req, res) => {
   try {
     const { userName, password } = req.body;
-    const added = await Services.createUserAccount(userName, password);
-    return res.json({
-      status: true,
-      added
-    });
+    const user = await Services.createUserAccount(userName, password);
+    res.render('home');
+    // return res.json({
+    //   status: true,
+    //   added
+    // });
   } catch (err) {
     console.error(err);
     res.status(500).json('Server error --> ' + err.message);
@@ -97,7 +39,7 @@ Router.post("/login", async (req,res) => {
   try {
     // const { userId } = req.body.userId;
     // const user = await Services.getUserInfo(userId);
-    res.redirect('createRoom/:userId')
+    res.render('home');
     // return res.json(user);
   } catch (err) {
     console.error(err);
@@ -105,35 +47,14 @@ Router.post("/login", async (req,res) => {
   }
 });
 
-Router.get('/getUsers', async (req, res) => {
-    try {
-      const users = await Services.getAllUsers();
-      return res.json({
-        users: users.map(user => ({
-            userKey: user.userKey,
-            name: user.name,
-            rank: user.rank,
-            history: {
-              noOfGamesPlayed: user.history.noOfGamesPlayed,
-              noOfGamesWins: user.history.noOfGamesWins,
-            }
-        }))
-      });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json('Server error --> ' + err.message);
-    }
-});
-
-Router.get('/profile/:userId', async (req, res) => {
+Router.get("/logout", async (req,res) => {
   try {
-    const user = await Services.getUserInfo(req.params.userId);
-    return res.json(user);
+    res.render('home');
   } catch (err) {
     console.error(err);
     res.status(500).json('Server error --> ' + err.message);
   }
-});
+})
 
 Router.get('/createRoom/:userId', async (req, res) => {
     res.render('createRoom');
@@ -141,11 +62,26 @@ Router.get('/createRoom/:userId', async (req, res) => {
 
 Router.post('/createRoom/:userId', async  (req, res) => {
   try {
-    const roomAdmin = await Services.getUserInfo(req.params.userId);
+    let roomAdmin = await Services.getUserInfo(req.params.userId);
     const roomLink = await Services.generateRoomLink(req.params.userId);
     const { noOfPlayers, noOfRounds} = req.body;
-    const added = await Services.createRoom(roomAdmin, roomLink, noOfPlayers, noOfRounds);
-    res.redirect("http://localhost:7000/board.html")
+    const room = await Services.createRoom(roomAdmin, roomLink, noOfPlayers, noOfRounds);
+    // room = { Admin : "0001",
+    //          roomLink : "link0001",
+    //          noOfPlayers : 4,
+    //          players : ["player 01", "player 02", "player 03", "player 04"],
+    //          phrase : "Kill two birds with one stone"
+    //       }
+    roomAdmin = {
+      userName: "0001",
+      password: "user1",
+      rank: 1,
+      history: {
+          noOfGamesPlayed: 10,
+          noOfGamesWins: 10
+      }
+  },
+    res.render('board', {members : ["player 01", "player 02", "player 03", "player 04"], phrase: "Barking on the wrong tree", roomAdmin: roomAdmin})
     // return res.json({
     //   status: true,
     //   added
@@ -156,9 +92,81 @@ Router.post('/createRoom/:userId', async  (req, res) => {
   }
 });
 
-Router.get('/board/:roomId', async (req,res) => {
-  res.render('board/board');
+Router.get("/joinRoom/:userId", async (req,res) => {
+  try {
+    let user = await Services.getUserInfo(req.params.userId);
+    res.render('board', {members : ["player 01", "player 02", "player 03", "player 04"], phrase: "Barking on the wrong tree", roomAdmin: null})
+    // res.render('board')
+  } catch (err) {
+    console.error(err);
+    // res.status(500).json('Server error --> ' + err.message);
+  }
+});
+
+Router.put('/start/:roomId', async(req,res) => {
+  try{
+    const room = await Services.getRoomInfo(req.params.roomId);
+
+    // const [noOfRounds, teams] = await Services.getRoundInfo(req.params.roomId);
+    // for(let i=0; i<noOfRounds; i++){
+    //   const guessers = await Services.getTeamsGuesser(teams);
+    //   const phrase = await Services.getPhrase();
+    // }
+    return res.json({
+      status: true,
+      room
+    });
+    // res.sendFile(path.join(__dirname, '../', '../views/board.html'))
+  } catch (err) {
+    console.error(err);
+    res.status(500).json('Server error --> ' + err.message);
+  }
+});
+
+Router.post('/submit', async(req,res) => {
+  try{
+    const { result } = req.body.result;
+    
+  } catch (err) {
+    console.error(err);
+    res.status(500).json('Server error --> ' + err.message);
+  }
 })
+
+
+module.exports = Router;
+
+
+
+Router.get('/getUsers', async (req, res) => {
+  try {
+    const users = await Services.getAllUsers();
+    return res.json({
+      users: users.map(user => ({
+          userKey: user.userKey,
+          name: user.name,
+          rank: user.rank,
+          history: {
+            noOfGamesPlayed: user.history.noOfGamesPlayed,
+            noOfGamesWins: user.history.noOfGamesWins,
+          }
+      }))
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json('Server error --> ' + err.message);
+  }
+});
+
+Router.get('/profile/:userId', async (req, res) => {
+try {
+  const user = await Services.getUserInfo(req.params.userId);
+  return res.json(user);
+} catch (err) {
+  console.error(err);
+  res.status(500).json('Server error --> ' + err.message);
+}
+});
 
 Router.get('/getRoom/:roomId', async (req, res) => {
   try {
@@ -189,35 +197,3 @@ Router.put('/joinTeam/:roomId/:teamId/:userId', async (req,res) => {
     res.status(500).json('Server error --> ' + err.message);
   }
 });
-
-Router.put('/start/:roomId', async(req,res) => {
-  try{
-
-    const room = await Services.getRoomInfo(req.params.roomId);
-
-    // const [noOfRounds, teams] = await Services.getRoundInfo(req.params.roomId);
-    // for(let i=0; i<noOfRounds; i++){
-    //   const guessers = await Services.getTeamsGuesser(teams);
-    //   const phrase = await Services.getPhrase();
-    // }
-    return res.json({
-      status: true,
-      room
-    });
-    // res.sendFile(path.join(__dirname, '../', '../views/board.html'))
-  } catch (err) {
-    console.error(err);
-    res.status(500).json('Server error --> ' + err.message);
-  }
-});
-
-Router.post('/submit', async(req,res) => {
-  try{
-
-  } catch (err) {
-    console.error(err);
-    res.status(500).json('Server error --> ' + err.message);
-  }
-})
-module.exports = Router;
-  

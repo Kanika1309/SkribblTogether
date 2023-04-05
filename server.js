@@ -10,10 +10,12 @@ const http = require("http").createServer(app);
 const io = require("socket.io")(http);
 
 app.use(express.static('views'));
+
 // io.on('connection', function (socket) {
 //     socket.emit("welcome","welcome to socket.io");
 //     console.log("new cliemt is connected")
 // });
+// const { Services } = require('./server/services/models');
 // const gameTeams = ["team1","team2"];
 
 // io
@@ -38,19 +40,17 @@ app.use(express.static('views'));
 let players = []
 
 io
-    .of("board.html")
     .on("connect", (socket) => {
         // console.log("new ");
         players.push(socket)
         console.log(`${socket.id} has connected.`)
-        socket.emit("welcome", "Have Fun!");
 
     socket.on("draw", (data) => {
         // console.log(data)
         players.forEach(con => {
             if(con.id !== socket.id){
                 // console.log({x: data.x, y: data.y});
-                io.of("board.html")
+                // io.of("board.html")
                     return con.emit("ondraw", {x: data.x, y: data.y})
             }
         });
@@ -61,7 +61,7 @@ io
         players.forEach(con => {
             if(con.id !== socket.id){
                 // console.log("ondown");
-                io.of("board.html")
+                // io.of("board.html")
                     return con.emit("ondown")
             }
         })
@@ -72,7 +72,7 @@ io
         players.forEach(con => {
             if(con.id !== socket.id){
                 // console.log("onup");
-                io.of("board.html")
+                // io.of("board.html")
                     return con.emit("onup")
             }
         })
@@ -81,10 +81,27 @@ io
     socket.on("clear", (data) => {
         players.forEach(con => {
             if(con.id !== socket.id){
-                io.of("board.html")
+                // io.of("board.html")
                     return con.emit("onclear", {w: data.w, h: data.h})
             }
         })
+    })
+
+    socket.on("start", () => {
+        players.forEach(con => {
+            if(con.id !== socket.id){
+                // io.of("board.html")
+                return con.emit("start","game stated!")
+            }else{
+                return con.emit("self")
+            }
+        })
+        // players.forEach(con => {
+        //     if(con.id !== socket.id){
+        //         // io.of("board.html")
+        //             return con.emit("start")
+        //     }
+        // })
     })
 
     socket.on("disconnect", (reason) => {
@@ -96,6 +113,9 @@ io
 app.use(express.json());
 app.use('/api', require('./server/'));
 
+// app.all('*', (req, res, next) => {
+//     res.send(("PAGE NOT FOUND!!!", 404))
+// })
 // console.log(sitePath);
 // console.log("Starting server in: " + __dirname + '/' + sitePath);
 
