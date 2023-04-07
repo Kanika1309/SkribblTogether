@@ -1,6 +1,8 @@
 // var sitePath = process.argv[2] || ".";
 const port = 7000;
-const express = require("express")
+const express = require("express");
+const { set } = require("./server/services");
+const { setTimeout } = require("timers/promises");
 const app = express();
 // const path = require('path');
 app.set('view engine', 'ejs');
@@ -51,7 +53,7 @@ io
             if(con.id !== socket.id){
                 // console.log({x: data.x, y: data.y});
                 // io.of("board.html")
-                    return con.emit("ondraw", {x: data.x, y: data.y})
+                return con.emit("ondraw", {x: data.x, y: data.y})
             }
         });
     });
@@ -62,7 +64,7 @@ io
             if(con.id !== socket.id){
                 // console.log("ondown");
                 // io.of("board.html")
-                    return con.emit("ondown")
+                return con.emit("ondown")
             }
         })
     })
@@ -73,20 +75,20 @@ io
             if(con.id !== socket.id){
                 // console.log("onup");
                 // io.of("board.html")
-                    return con.emit("onup")
+                return con.emit("onup")
             }
         })
     })
 
     socket.on("clear", (data) => {
+        let i=0;
         players.forEach(con => {
             if(con.id !== socket.id){
                 // io.of("board.html")
-                    return con.emit("onclear", {w: data.w, h: data.h})
+                return con.emit("onclear", {w: data.w, h: data.h})
             }
         })
     })
-
     socket.on("start", () => {
         players.forEach(con => {
             if(con.id !== socket.id){
@@ -96,14 +98,28 @@ io
                 return con.emit("self")
             }
         })
-        // players.forEach(con => {
-        //     if(con.id !== socket.id){
-        //         // io.of("board.html")
-        //             return con.emit("start")
-        //     }
-        // })
+        io.sockets.emit("timer",{msg: `Players can start drawing`})
+        // for(let i=0;i<4;i++){
+        //     console.log("loop")
+        //     io.sockets.emit("turn", {msg: `Player ${i+1} can start drawing`})
+        // }
     })
-
+    // socket.on("submit", () => {
+    //     players.forEach(con => {
+    //         if(con.id !== socket.id){
+    //             // io.of("board.html")
+    //             return con.emit("onsubmit","game over!")
+    //         }else{
+    //             return con.emit("onsubmit","Guesser Can Guess!")
+    //         }
+    //     })
+    // });
+    // socket.on("onturn", () => {
+    //     console.log("onturn")
+    //     players.forEach(con => {
+    //         console.log("onturn2")
+    //     })
+    // })
     socket.on("disconnect", (reason) => {
         console.log(`${socket.id} has disconnected.`)
         players = players.filter(con => con.id != socket.id);

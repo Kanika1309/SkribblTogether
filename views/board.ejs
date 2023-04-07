@@ -31,6 +31,7 @@
                 font-style: normal;
                 color: black;
                 font-weight: bolder;
+                background-color: aliceblue;
             }
             .phrase {
                 border: 0.2px solid black;
@@ -58,6 +59,7 @@
                 margin-right: 2%;
                 margin-top: 3px;
                 height: 540px;
+                pointer-events: none;
             }
             .link {
                 border: 0.2px solid black;
@@ -90,7 +92,7 @@
                 background-color:blueviolet;
             }
             .input * {
-                padding: 5px;
+                padding: 3px;
                 text-align: center;
             }
             .input button{
@@ -132,6 +134,19 @@
                 height: 20px;
                 display: none;
             }
+            .input #timer{
+                width: 12%;
+                height: 30px;
+                border: 1px solid black;
+                border-width: 2px;
+                border-radius: 7px;
+                color:crimson;
+                font-size: 25px;
+                font-weight: bolder;
+                background-color:bisque;
+                margin-right: 20px;
+                display: none;
+            }
     </style>
     <title>Board</title>
 </head>
@@ -159,6 +174,7 @@
             <button id="start" type="start" formaction="" class="btn btn-success">START</button>
             <% } %>
             <button id="submit" type="submit" visiblity="hidden" formaction="" class="btn btn-success">SUBMIT</button>
+            <div id="timer" >00:30</div>
         </div>
     </div>
     <!-- <script src="../app.js"></script> -->
@@ -171,6 +187,8 @@
             const guess = document.querySelector('#guess');
             const start = document.querySelector('#start');
             const submit = document.querySelector('#submit');
+            const member = document.querySelector('#member');
+            const timer = document.querySelector('#timer');
 
             const canvasOffsetX = canvas.offsetLeft;
             const canvasOffsetY = canvas.offsetTop;
@@ -186,19 +204,53 @@
             let startX;
             let startY;
 
+            io.on("timer",(data) => {
+                alert(data.msg);
+                var timeLeft = 30;
+                var timerId = setInterval(countdown, 1000);
+                function countdown() {
+                    if (timeLeft == 0) {
+                        clearTimeout(timerId);
+                        timer.innerHTML = 'Time Over';
+                        // io.emit("submit",{})
+                    } else {
+                        // if(timeLeft<=30 && timeLeft>20){
+                        // }
+                        if(timeLeft < 10) {
+                            timeLeft = 0 + '' + timeLeft;
+                        }
+                            
+                        timer.innerHTML = '00:' + timeLeft;
+                            
+                        timeLeft -= 1;
+                    }
+                }
+            })
+            // io.on("onsubmit", (data) => {
+            //     alert(data)
+            // })
             io.on("onclear", ({w, h}) => {
                 ctx.clearRect(0, 0, w, h);
             })
             io.on("start", (data) => {
-                alert(data);
+                // alert(data);
                 phrase.style.display="block";
                 clear.style.display="inline-block";
+                timer.style.display="inline-block";
+                canvas.style.pointerEvents="auto";
+                // canvas.style.cursor="default";
             })
             io.on("self", () => {
                 start.style.display="none";
                 guessLabel.style.display="inline-block";
                 guess.style.display="inline-block";
                 submit.style.display="inline-block";
+            })
+            io.on("turn", (data) => {
+                alert(data.msg)
+                // member.style.color= "darkcyan";
+                // member.style.color= "black";
+                // io.emit("onturn",{})
             })
             inputOption.addEventListener('click', e => {
                 if (e.target.id === 'clear') {
@@ -208,14 +260,14 @@
                     ctx.clearRect(0, 0, w, h);
                 }
                 if (e.target.id === 'start') {
-                    io.emit("start","game stated!")
+                    io.emit("start", {})
                 }
             });
 
-            io.on("ondown", () => {
-                isPainting = true;
-                // console.log("on2down")
-            })
+            // io.on("ondown", () => {
+            //     isPainting = true;
+            //     // console.log("on2down")
+            // })
 
             canvas.addEventListener('mousedown', (e) => {
                 isPainting = true;
