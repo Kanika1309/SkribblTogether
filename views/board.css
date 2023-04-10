@@ -2,68 +2,115 @@ body{
     margin: 0;
     padding:0;
 }
-
 .members {
-    border: 1px solid black;
-    border-width: 6px;
+    border: 0.2px solid black;
+    border-width: 4px;
     border-radius: 3px;
-    /* border-color: black; */
-    width: 90%;
-    margin-left: 80px;
-    margin-top: 7px;
-    height: 60px
-}
-
-.drawing-board {
-    border: 1px solid black;
-    border-width: 6px;
-    border-radius: 3px;
-    /* border-color: black; */
-    width: 90%;
-    margin-left: 80px;
+    width: 95%;
+    margin-left: 2%;
+    margin-right: 2%;
     margin-top: 3px;
-    height: 600px
+    height: 40px;
+    display: flex
 }
-
-.link {
-    border: 1px solid black;
-    border-width: 6px;
-    border-radius: 3px;
-    width: 90%;
-    margin-left: 80px;
-    margin-top: 3px;
-    height: 60px;
-    background-color:rosybrown;
-}
-
-.link > a {
+.members #member {
+    position: relative;
+    width: 25%;
+    border: 0.2px solid black;
     text-align: center;
-    text-decoration: none;
-    font-size: 99%;
+    font-size: 30px;
     font-style: normal;
     color: black;
     font-weight: bolder;
-    margin-bottom: 3px;
+    background-color: aliceblue;
 }
-
-.input {
-    border: 1px solid black;
-    border-width: 6px;
+.phrase {
+    border: 0.2px solid black;
+    border-width: 4px;
     border-radius: 3px;
-    width: 90%;
-    margin-left: 80px;
+    width: 95%;
+    margin-left: 2%;
+    margin-right: 2%;
     margin-top: 3px;
-    height: 60px;
+    height: 30px;
+    font-size: 25px;
+    text-align: center;
+    font-style: normal;
+    color: black;
+    font-weight: bolder;
+    background-color:cadetblue;
+    display: none;
+}
+#drawing-board {
+    border: 0.2px solid black;
+    border-width: 4px;
+    border-radius: 3px;
+    width: 95%;
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-top: 3px;
+    height: 540px;
+    pointer-events: none;
+}
+.link {
+    border: 0.2px solid black;
+    border-width: 4px;
+    border-radius: 3px;
+    width: 95%;
+    margin-left: 2%;
+    margin-right: 2%;
+    height: 30px;
+    text-align: center;
+    background-color:rosybrown;
+}
+.link > a {
+    text-align: center;
+    text-decoration: none;
+    font-size: x-large;
+    font-style: normal;
+    color: black;
+    font-weight: bolder;
+}
+.input {
+    border: 0.2px solid black;
+    border-width: 4px;
+    border-radius: 3px;
+    width: 95%;
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-top: 3px;
+    height: 50px;
     background-color:blueviolet;
 }
-
 .input * {
-    margin-right: 12px;
+    padding: 3px;
     text-align: center;
-    margin-top: 7px;
 }
-
-.input #inputOption label{
+.input button{
+    width: 8%;
+    height: 40px;
+    border: 1px solid black;
+    border-width: 2px;
+    border-radius: 7px;
+    color:black;
+    font-size: 20px;
+    font-weight: bolder
+}
+.input button[type="clear"]{
+    background-color:bisque;
+    margin-right: 20px;
+    display: none;
+}
+.input button[type="start"]{
+    background-color:darkcyan;
+    margin-left: 40px;
+    display: inline;
+}
+.input button[type="submit"]{
+    background-color:crimson;
+    display: none;
+}
+.input #guessLabel{
     font-size: 20px;
     font-weight: bolder;
     padding: 4px;
@@ -71,39 +118,23 @@ body{
     border-width: 2px;
     border-radius: 7px;
     background-color:lightsteelblue;
+    display: none;
 }
-
-.input input[type="text"]{
-    width: 40%;
-    height: 25px;
-}
-
-.input input[type="number"]{
-    width: 10%;
+.input #guess{
+    width: 25%;
     height: 20px;
-    border: 1px solid gray;
-    border-width: 3px;
-    border-radius: 3px;
-    font-size: 16px;
+    display: none;
 }
-
-.input button{
-    width: 10%;
+.input #timer{
+    width: 12%;
     height: 30px;
-    border: 1px solid gray;
+    border: 1px solid black;
     border-width: 2px;
     border-radius: 7px;
-    background-color:lightsteelblue;
-    color:black;
-    font-size: 18px;
+    color:crimson;
+    font-size: 25px;
     font-weight: bolder;
+    background-color:bisque;
+    margin-right: 20px;
+    display: none;
 }
-
-/* .members .buttons *{
-    align-content: center;
-} */
-/* .members .buttons button{
-    width: 5%;
-    height: 30px;
-    padding: 2px;
-} */

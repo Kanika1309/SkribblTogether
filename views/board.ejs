@@ -153,7 +153,7 @@
 <body>
     <div class="members">
         <% for(var i=0; i<members.length; i++) { %>
-            <div id="member"><%= members[i] %></div>
+            <div id="member"></div>
         <% } %>
     </div>
     <div class="phrase"><%= phrase %></div>
@@ -177,7 +177,7 @@
             <div id="timer" >00:30</div>
         </div>
     </div>
-    <!-- <script src="../app.js"></script> -->
+    <!-- <script src="./app.js"></script> -->
     <script>
             const canvas = document.getElementById('drawing-board');
             const inputOption = document.getElementById('inputOption');
@@ -212,7 +212,7 @@
                     if (timeLeft == 0) {
                         clearTimeout(timerId);
                         timer.innerHTML = 'Time Over';
-                        // io.emit("submit",{})
+                        canvas.style.pointerEvents="none";
                     } else {
                         // if(timeLeft<=30 && timeLeft>20){
                         // }
@@ -226,31 +226,24 @@
                     }
                 }
             })
-            // io.on("onsubmit", (data) => {
-            //     alert(data)
+            // io.on("onguess", (data) => {
+            //     alert(data.msg);
             // })
             io.on("onclear", ({w, h}) => {
                 ctx.clearRect(0, 0, w, h);
             })
-            io.on("start", (data) => {
-                // alert(data);
+            io.on("start", () => {
                 phrase.style.display="block";
                 clear.style.display="inline-block";
                 timer.style.display="inline-block";
                 canvas.style.pointerEvents="auto";
-                // canvas.style.cursor="default";
             })
             io.on("self", () => {
                 start.style.display="none";
                 guessLabel.style.display="inline-block";
                 guess.style.display="inline-block";
                 submit.style.display="inline-block";
-            })
-            io.on("turn", (data) => {
-                alert(data.msg)
-                // member.style.color= "darkcyan";
-                // member.style.color= "black";
-                // io.emit("onturn",{})
+                timer.style.display="inline-block";
             })
             inputOption.addEventListener('click', e => {
                 if (e.target.id === 'clear') {
@@ -264,10 +257,10 @@
                 }
             });
 
-            // io.on("ondown", () => {
-            //     isPainting = true;
-            //     // console.log("on2down")
-            // })
+            io.on("ondown", () => {
+                isPainting = true;
+                // console.log("on2down")
+            })
 
             canvas.addEventListener('mousedown', (e) => {
                 isPainting = true;

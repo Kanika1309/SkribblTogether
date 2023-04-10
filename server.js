@@ -93,34 +93,23 @@ io
         players.forEach(con => {
             if(con.id !== socket.id){
                 // io.of("board.html")
-                return con.emit("start","game stated!")
+                return con.emit("start",{})
             }else{
                 return con.emit("self")
             }
         })
-        io.sockets.emit("timer",{msg: `Players can start drawing`})
-        // for(let i=0;i<4;i++){
-        //     console.log("loop")
-        //     io.sockets.emit("turn", {msg: `Player ${i+1} can start drawing`})
-        // }
+        io.sockets.emit("timer",{msg: `Players can start drawing!`})
+        // setTimeout(function(){
+        //     console.log("hiiiii");
+        //     io.sockets.emit("onguess",{msg: `Guesser turn to guess!`})
+        // }, 30000);
     })
-    // socket.on("submit", () => {
+    // socket.on("guess", () => {
     //     players.forEach(con => {
-    //         if(con.id !== socket.id){
-    //             // io.of("board.html")
-    //             return con.emit("onsubmit","game over!")
-    //         }else{
-    //             return con.emit("onsubmit","Guesser Can Guess!")
-    //         }
+    //         return con.emit("onguess","Guesser turn to guess!");
     //     })
     // });
-    // socket.on("onturn", () => {
-    //     console.log("onturn")
-    //     players.forEach(con => {
-    //         console.log("onturn2")
-    //     })
-    // })
-    socket.on("disconnect", (reason) => {
+    socket.on("disconnect", () => {
         console.log(`${socket.id} has disconnected.`)
         players = players.filter(con => con.id != socket.id);
     });
