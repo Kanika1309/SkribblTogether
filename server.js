@@ -102,7 +102,7 @@ io
     })
     
     socket.on("submit", () => {
-        console.log("submit")
+        // console.log("submit")
         players.forEach(con => {
             return con.emit("onsubmit", "Game Over!");
         });

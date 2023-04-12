@@ -4,155 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link rel="stylesheet" href="board.css"> -->
-    <style>
-            body{
-                margin: 0;
-                padding:0;
-            }
-            .members {
-                border: 0.2px solid black;
-                border-width: 4px;
-                border-radius: 3px;
-                width: 95%;
-                margin-left: 2%;
-                margin-right: 2%;
-                margin-top: 3px;
-                height: 40px;
-                display: flex
-            }
-            .members #member {
-                position: relative;
-                width: 25%;
-                border: 0.2px solid black;
-                text-align: center;
-                font-size: 30px;
-                font-style: normal;
-                color: black;
-                font-weight: bolder;
-                background-color: aliceblue;
-                /* display:none; */
-            }
-            .phrase {
-                border: 0.2px solid black;
-                border-width: 4px;
-                border-radius: 3px;
-                width: 95%;
-                margin-left: 2%;
-                margin-right: 2%;
-                margin-top: 3px;
-                height: 30px;
-                font-size: 25px;
-                text-align: center;
-                font-style: normal;
-                color: black;
-                font-weight: bolder;
-                background-color:cadetblue;
-                display: none;
-            }
-            #drawing-board {
-                border: 0.2px solid black;
-                border-width: 4px;
-                border-radius: 3px;
-                width: 95%;
-                margin-left: 2%;
-                margin-right: 2%;
-                margin-top: 3px;
-                height: 540px;
-                pointer-events: none;
-            }
-            .link {
-                border: 0.2px solid black;
-                border-width: 4px;
-                border-radius: 3px;
-                width: 95%;
-                margin-left: 2%;
-                margin-right: 2%;
-                height: 30px;
-                text-align: center;
-                background-color:rosybrown;
-            }
-            .link > a {
-                text-align: center;
-                text-decoration: none;
-                font-size: x-large;
-                font-style: normal;
-                color: black;
-                font-weight: bolder;
-            }
-            .input {
-                border: 0.2px solid black;
-                border-width: 4px;
-                border-radius: 3px;
-                width: 95%;
-                margin-left: 2%;
-                margin-right: 2%;
-                margin-top: 3px;
-                height: 50px;
-                background-color:blueviolet;
-            }
-            .input * {
-                padding: 3px;
-                text-align: center;
-            }
-            .input button{
-                width: 8%;
-                height: 40px;
-                border: 1px solid black;
-                border-width: 2px;
-                border-radius: 7px;
-                color:black;
-                font-size: 20px;
-                font-weight: bolder
-            }
-            .input #form{
-                display: none[];
-                width: 60%;
-            }
-            .input button[type="clear"]{
-                background-color:bisque;
-                margin-right: 20px;
-                display: none;
-            }
-            .input button[type="start"]{
-                background-color:darkcyan;
-                margin-left: 40px;
-                display: inline-block;
-            }
-            .input button[type="submit"]{
-                width: 16%;
-                background-color:crimson;
-                display: none;
-            }
-            .input #guessLabel{
-                font-size: 20px;
-                font-weight: bolder;
-                padding: 4px;
-                border: 1px solid gray;
-                border-width: 2px;
-                border-radius: 7px;
-                background-color:lightsteelblue;
-                display: none;
-            }
-            .input #guess{
-                width: 50%;
-                height: 20px;
-                display: none;
-            }
-            .input #timer{
-                width: 10%;
-                height: 30px;
-                border: 1px solid black;
-                border-width: 2px;
-                border-radius: 7px;
-                color:crimson;
-                font-size: 25px;
-                font-weight: bolder;
-                background-color:bisque;
-                margin-right: 20px;
-                display: none;
-            }
-    </style>
+    <link rel="stylesheet" href="/board.css">
     <title>Board</title>
 </head>
 <body>
@@ -185,7 +37,7 @@
         </div>
     </div>
     <script src="/socket.io/socket.io.js"></script>
-    <!-- <script src="/app.js"></script> -->
+    <!-- <script src="/views/app.js"></script> -->
     <script>
             const canvas = document.getElementById('drawing-board');
             const inputOption = document.getElementById('inputOption');
@@ -321,7 +173,6 @@
                 ctx.lineTo(x, y);
                 ctx.stroke();
             });
-
     </script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script> -->
 </body>
