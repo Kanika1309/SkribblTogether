@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <link rel="stylesheet" href="board.css"> -->
-    <script src="/socket.io/socket.io.js"></script>
     <style>
             body{
                 margin: 0;
@@ -32,6 +31,7 @@
                 color: black;
                 font-weight: bolder;
                 background-color: aliceblue;
+                /* display:none; */
             }
             .phrase {
                 border: 0.2px solid black;
@@ -105,6 +105,10 @@
                 font-size: 20px;
                 font-weight: bolder
             }
+            .input #form{
+                display: none[];
+                width: 60%;
+            }
             .input button[type="clear"]{
                 background-color:bisque;
                 margin-right: 20px;
@@ -113,9 +117,10 @@
             .input button[type="start"]{
                 background-color:darkcyan;
                 margin-left: 40px;
-                display: inline;
+                display: inline-block;
             }
             .input button[type="submit"]{
+                width: 16%;
                 background-color:crimson;
                 display: none;
             }
@@ -130,12 +135,12 @@
                 display: none;
             }
             .input #guess{
-                width: 25%;
+                width: 50%;
                 height: 20px;
                 display: none;
             }
             .input #timer{
-                width: 12%;
+                width: 10%;
                 height: 30px;
                 border: 1px solid black;
                 border-width: 2px;
@@ -152,7 +157,7 @@
 </head>
 <body>
     <div class="members">
-        <% for(var i=0; i<members.length; i++) { %>
+        <% for(var i=0; i<noOfPlayers; i++) { %>
             <div id="member"></div>
         <% } %>
     </div>
@@ -161,23 +166,26 @@
         <canvas id="drawing-board"></canvas>
     </div>
     <div class="link">
-        <a href="http://localhost:7000/api/createRoom/:userId">ROOM LINK</a>
+        <a href="http://localhost:7000/api/">ROOM LINK</a>
     </div>
     <div class="input">
         <div id="inputOption">
-            <button id="clear" type="clear" >CLEAR</button>
-            <label id="guessLabel" for="guess">GUESS</label>
-            <input id="guess" type="text" placeholder="Guess the phrase.">
+            <form action="/api/submit" method="POST" id="form">
+                <label id="guessLabel" for="guess">GUESS</label>
+                <input id="guess" type="text" placeholder="Guess the phrase.">
+                <button id="submit" type="submit" visiblity="hidden" class="btn btn-success">SUBMIT</button>
+            </form>
             <!-- <label for="linewidth">LINEWIDTH</label>
             <input id="linewidth" name='linewidth' type="number" value="5"> -->
             <% if(roomAdmin!= null) { %>
             <button id="start" type="start" formaction="" class="btn btn-success">START</button>
             <% } %>
-            <button id="submit" type="submit" visiblity="hidden" formaction="" class="btn btn-success">SUBMIT</button>
+            <button id="clear" type="clear" >CLEAR</button>
             <div id="timer" >00:30</div>
         </div>
     </div>
-    <!-- <script src="./app.js"></script> -->
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- <script src="/app.js"></script> -->
     <script>
             const canvas = document.getElementById('drawing-board');
             const inputOption = document.getElementById('inputOption');
@@ -189,6 +197,7 @@
             const submit = document.querySelector('#submit');
             const member = document.querySelector('#member');
             const timer = document.querySelector('#timer');
+            const form = document.querySelector('#form');
 
             const canvasOffsetX = canvas.offsetLeft;
             const canvasOffsetY = canvas.offsetTop;
@@ -226,9 +235,6 @@
                     }
                 }
             })
-            // io.on("onguess", (data) => {
-            //     alert(data.msg);
-            // })
             io.on("onclear", ({w, h}) => {
                 ctx.clearRect(0, 0, w, h);
             })
@@ -240,10 +246,15 @@
             })
             io.on("self", () => {
                 start.style.display="none";
+                form.style.display="inline-block"
                 guessLabel.style.display="inline-block";
                 guess.style.display="inline-block";
                 submit.style.display="inline-block";
                 timer.style.display="inline-block";
+            })
+            io.on("onsubmit", (data) => {
+                alert(data)
+                submit.click();
             })
             inputOption.addEventListener('click', e => {
                 if (e.target.id === 'clear') {
@@ -254,6 +265,9 @@
                 }
                 if (e.target.id === 'start') {
                     io.emit("start", {})
+                }
+                if (e.target.id === 'submit') {
+                    io.emit("submit", {})
                 }
             });
 

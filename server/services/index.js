@@ -81,7 +81,7 @@ Router.post('/createRoom/:userId', async  (req, res) => {
           noOfGamesWins: 10
       }
   },
-    res.render('board', {members : ["player 01", "player 02", "player 03", "player 04"], phrase: "Barking on the wrong tree", roomAdmin: roomAdmin})
+    res.render('board', {noOfPlayers : 5, phrase: "Barking on the wrong tree", roomAdmin: roomAdmin})
     // return res.json({
     //   status: true,
     //   added
@@ -95,7 +95,7 @@ Router.post('/createRoom/:userId', async  (req, res) => {
 Router.get("/joinRoom/:userId", async (req,res) => {
   try {
     let user = await Services.getUserInfo(req.params.userId);
-    res.render('board', {members : ["player 01", "player 02", "player 03", "player 04"], phrase: "Barking on the wrong tree", roomAdmin: null})
+    res.render('board', {noOfPlayers : 5, phrase: "Barking on the wrong tree", roomAdmin: null})
     // res.render('board')
   } catch (err) {
     console.error(err);
@@ -125,8 +125,8 @@ Router.put('/start/:roomId', async(req,res) => {
 
 Router.post('/submit', async(req,res) => {
   try{
-    const { result } = req.body.result;
-    
+    // const { result } = req.body.result;
+    res.render('home');
   } catch (err) {
     console.error(err);
     res.status(500).json('Server error --> ' + err.message);

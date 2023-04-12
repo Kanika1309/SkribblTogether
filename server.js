@@ -99,21 +99,21 @@ io
             }
         })
         io.sockets.emit("timer",{msg: `Players can start drawing!`})
-        // setTimeout(function(){
-        //     console.log("hiiiii");
-        //     io.sockets.emit("onguess",{msg: `Guesser turn to guess!`})
-        // }, 30000);
     })
-    // socket.on("guess", () => {
-    //     players.forEach(con => {
-    //         return con.emit("onguess","Guesser turn to guess!");
-    //     })
-    // });
+    
+    socket.on("submit", () => {
+        console.log("submit")
+        players.forEach(con => {
+            return con.emit("onsubmit", "Game Over!");
+        });
+    });
+
     socket.on("disconnect", () => {
         console.log(`${socket.id} has disconnected.`)
         players = players.filter(con => con.id != socket.id);
     });
-});
+
+    })
 
 app.use(express.json());
 app.use('/api', require('./server/'));
