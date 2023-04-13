@@ -147,12 +147,12 @@ const Services = {
         //     userName: userName
         // }).lean();
     },
-    generateRoomLink: (userKey) => {
-        return "link"+userKey;
+    generateRoomLink: (userName) => {
+        return "link"+userName;
     },
     createRoom: (roomAdmin, roomLink, noOfPlayers, noOfRounds) => {
         // const noOfMembers =  noOfPlayers%2 == 0 ? noOfPlayers/2 : noOfPlayers/2+1;
-        players = [users[0]]
+        players = [roomAdmin]
         const room =  {
             roomAdmin,
             roomLink,
@@ -172,70 +172,66 @@ const Services = {
             //     teamTotalScore: 0
             // }],
             // rounds: [],
-            totalScore: 5
+            totalScore: 0
         }
-        return rooms
-        return RoomModel.create({
-            roomAdmin,
-            roomLink, 
-            noOfPlayers, 
-            teams: [(noOfMembers) => {
-                return TeamModel.create({
-                    noOfMembers, members
-                });
-            }], 
-            noOfRounds,
-            rounds: [() => {
-                return RoundModel.create({
-                    phase, roundScore
-                });
-            }],
-            winningTeam
-        });
+        return room
+        // return RoomModel.create({
+        //     roomAdmin,
+        //     roomLink, 
+        //     noOfPlayers, 
+        //     teams: [(noOfMembers) => {
+        //         return TeamModel.create({
+        //             noOfMembers, members
+        //         });
+        //     }], 
+        //     noOfRounds,
+        //     rounds: [() => {
+        //         return RoundModel.create({
+        //             phase, roundScore
+        //         });
+        //     }],
+        //     winningTeam
+        // });
     },
     getRoomInfo: (roomLink) => {
-        for(let i in rooms){
-            if(rooms[i].roomLink === roomLink){
-                return rooms[i]
-            }
-        }
+        // for(let i in rooms){
+        //     if(rooms[i].roomLink === roomLink){
+        //         return rooms[i]
+        //     }
+        // }
+        return rooms
     },
-    addMember: (roomLink, teamKey, userKey) => {
-        let member = {}
-        for(let i in users){
-            if(users[i].userKey === userKey){
-                member = users[i]
-            }
-        }
-        for(let i in rooms){
-            if(rooms[i].roomLink === roomLink){
-                if(rooms[i].teams[0].members.length < rooms[i].teams[0].noOfMembers && rooms[i].teams[0].teamKey === teamKey){
-                    rooms[i].teams[0].members.push(member);
-                }else{
-                    rooms[i].teams[1].members.push(member);
-                }
-            }
-        }
+    addMember: (room, user) => {
+        let p = rooms.players
+        p.push(user)
+        rooms.players=p
+        return rooms
+        // let member = {}
+        // for(let i in users){
+        //     if(users[i].userKey === userKey){
+        //         member = users[i]
+        //     }
+        // }
+        // for(let i in rooms){
+        //     if(rooms[i].roomLink === roomLink){
+        //         if(rooms[i].teams[0].members.length < rooms[i].teams[0].noOfMembers && rooms[i].teams[0].teamKey === teamKey){
+        //             rooms[i].teams[0].members.push(member);
+        //         }else{
+        //             rooms[i].teams[1].members.push(member);
+        //         }
+        //     }
+        // }
         return rooms;
-    },
-    getRoundInfo: (roomLink) => {
-        for(let i in rooms){
-            if(rooms[i].roomLink === roomLink){
-                return [rooms[i].noOfRounds, rooms[i].teams];
-            }
-        }
     },
     getPhrase: () => { 
         return phrases[getRndInteger(0,phrases.length)]
     },
-    getTeamsGuesser: (teams) => {
-        let guessers = []
-        guessers[0] = teams[0].members[getRndInteger(0,teams[0].members.length)];
-        guessers[1] = teams[0].members[getRndInteger(0,teams[1].members.length)];
-        return guessers;
-    },
-    play: (teams, guessers, phrase) => { 
-    }
+    // getTeamsGuesser: (teams) => {
+    //     let guessers = []
+    //     guessers[0] = teams[0].members[getRndInteger(0,teams[0].members.length)];
+    //     guessers[1] = teams[0].members[getRndInteger(0,teams[1].members.length)];
+    //     return guessers;
+    // },
 }
 
 function getRndInteger(min, max) {
