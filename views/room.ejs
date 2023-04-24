@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AvaiableRooms</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .box {
+            justify-content: center;
+        }
+        .rooms {
+            border: 0.2px solid black;
+            border-width: 4px;
+            border-radius: 3px;
+            width: 94%;
+            margin-left: 3%;
+            margin-top: 4%;
+            height: 500px;
+            background-color:lightsteelblue;
+        }
+        .rooms #roomHead{
+            border: 0.2px solid black;
+            border-width: 4px;
+            border-radius: 3px;
+            position: relative;
+            width: 92%;
+            margin-left: 4%;
+            margin-top: 4%;
+        }
+        .rooms #head{
+            height: 35px;
+            background-color: blueviolet;
+            font-size: larger;
+            font-weight: bolder;
+        }
+        .rooms #room{
+            border: 0.2px solid black;
+            border-width: 4px;
+            border-radius: 3px;
+            position: relative;
+            height: 70px;
+            width: 92%;
+            margin-left: 4%;
+            background-color: cadetblue;
+            font-size: large;
+            font-weight: bolder;
+        }
+        .rooms #team{
+            border: 0.2px solid black;
+            border-width: 2px;
+            background-color:darkgrey;
+            font-size:medium;
+            font-weight:bold;
+        }
+    </style>
+
+</head>
+
+<body class="d-flex flex-column vh-100">
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">SKRIBBL TOGETHER</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link" href="/api/">Home</a>
+                    <!-- <a class="nav-link " href="/api/rules">Rules</a>
+                    <a class="nav-link " href="/api/profile/:userId">My Profile</a> -->
+                </div>
+                <div class="navbar-nav ms-auto">
+                        <!-- <a class="nav-link" href="/api/login">Login</a>
+                        <a class="nav-link" href="/api/register">Sign Up</a> -->
+                        <a class="nav-link" href="/api/logout">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="box">
+        <div class="rooms">
+            <table id="roomHead">
+                <thead id="head">
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Rooms</th>
+                      <th scope="col">Team 1</th>
+                      <th scope="col">Team 2</th>
+                    </tr>
+                  </thead>
+                  <tbody id="room">
+                    <tr>
+                      <th scope="row">1</th>
+                      <td>Room Name</td>
+                      <td><a href="/api/joinRoom/:roomLink/:userId">
+                        <button id="team" type="" >Join Team 1</button>
+                      </a></td>
+                      <td><a href="/api/joinRoom/:roomLink/:userId">
+                        <button id="team" type="" >Join Team 2</button>
+                      </a></td>
+                    </tr>
+                  </tbody>
+                </table>
+            </table>
+            <!-- <div id="rooms">
+
+            </div>
+            <div id="room">
+
+            </div> -->
+        </div>
+    </div>
+        <!-- <div class="row">
+            <div class="col width=80%"> -->
+                <!-- <div class="card shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">ROOM</h5>
+                        <table class="table">
+                            <thead>
+                              <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">First</th>
+                                <th scope="col">Last</th>
+                                <th scope="col">Handle</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <th scope="row">1</th>
+                                <td>Mark</td>
+                                <td>Otto</td>
+                                <td>@mdo</td>
+                              </tr>
+                              <tr>
+                                <th scope="row">2</th>
+                                <td>Jacob</td>
+                                <td>Thornton</td>
+                                <td>@fat</td>
+                              </tr>
+                              <tr>
+                                <th scope="row">3</th>
+                                <td colspan="2">Larry the Bird</td>
+                                <td>@twitter</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                    </div>
+                </div> -->
+            <!-- </div>
+        </div> -->
+    <!-- </div> -->
+
+        <main class="container mt-5">
+        </main>
+        <footer class="footer bg-dark py-3 mt-auto">
+            <div class="container">
+                <span class="text-muted">&copy; SKRIBBL TOGETHER 2023</span>
+            </div>
+        </footer>
+</body>
+</html>

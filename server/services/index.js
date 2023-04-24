@@ -54,6 +54,10 @@ Router.get("/logout", async (req,res) => {
   }
 })
 
+Router.get('/rooms', async (req, res) => {
+  res.render('room');
+});
+
 Router.get('/createRoom/:userId', async (req, res) => {
     res.render('createRoom');
 });
