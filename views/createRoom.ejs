@@ -20,7 +20,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-link" href="/api/">Home</a>
+                    <a class="nav-link active" aria-current="page" href="/api/<%=userId%>">Home</a>
                     <!-- <a class="nav-link " href="/api/rules">Rules</a>
                     <a class="nav-link " href="/api/profile/:userId">My Profile</a> -->
                 </div>
@@ -39,7 +39,15 @@
                 <div class="card shadow">
                     <div class="card-body">
                         <h5 class="card-title">CREATE ROOM</h5>
-                        <form action="/api/createRoom/:userId" method="POST" class="validated-form" novalidate>
+                        <form action="/api/createRoom/<%=userId%>" method="POST" class="validated-form" novalidate>
+                            <div class="mb-3">
+                                <label class="form-label" for="roomName">ROOM NAME</label>
+                                <input class="form-control" type="text" id="roomName" name="roomName" autofocus min="2"
+                                    required>
+                                <div class="invalid-feedback">
+                                    Please enter room name.
+                                </div>
+                            </div>
                             <div class="mb-3">
                                 <label class="form-label" for="noOfPlayers">NUMBER OF PLAYERS</label>
                                 <input class="form-control" type="number" id="noOfPlayers" name="noOfPlayers" autofocus min="2"

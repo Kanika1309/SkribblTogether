@@ -9,7 +9,13 @@ Router.use(express.urlencoded({  extended: true }));
 // const publicPath = path.join(__dirname + '../' + '../' + '../draw/draw.html');
 
 Router.get('/', async (req,res) => {
-  res.render('home', {check: false});
+  try {
+    // console.log("hiiii")
+    res.render('home', {check: false, id: ""});
+  } catch (err) {
+    console.error(err);
+    res.status(500).json('Server error --> ' + err.message);
+  }
 })
 
 Router.get("/register", async (req,res) => {
@@ -38,7 +44,7 @@ Router.get("/login", async (req,res) => {
 
 Router.post("/login", async (req,res) => {
   try {
-    const { userName } = req.body.userName;
+    const { userName, password } = req.body;
     const user = await Services.getUserInfo(userName);
     // console.log(user)
     res.redirect(`/api/${user._id}`);
@@ -51,57 +57,56 @@ Router.post("/login", async (req,res) => {
 
 Router.get("/logout", async (req,res) => {
   try {
-    res.render('home');
+    res.redirect('/api/');
   } catch (err) {
     console.error(err);
     res.status(500).json('Server error --> ' + err.message);
   }
 })
 
-Router.get('/rooms', async (req, res) => {
-  res.render('room');
-});
-
 Router.get('/:userId', async (req,res) => {
-  res.render('home', {check: true});
+  // console.log(req.params)
+  res.render('home', {check: true, id: req.params.userId});
 })
 
 Router.get('/createRoom/:userId', async (req, res) => {
-    res.render('createRoom');
+    // console.log(req.params.userId)
+    res.render('createRoom', {userId: req.params.userId});
 });
 
 Router.post('/createRoom/:userId', async  (req, res) => {
   try {
-    let roomAdmin = await Services.getUserInfo(req.params.userId);
+    const roomAdmin = await Services.getUserInfoById(req.params.userId);
     const roomLink = await Services.generateRoomLink(req.params.userId);
-    const { noOfPlayers, noOfRounds} = req.body;
-    const room = await Services.createRoom(roomAdmin, roomLink, noOfPlayers, noOfRounds);
-    roomAdmin = {
-      userName: "0001",
-      password: "user1",
-      rank: 1,
-      history: {
-          noOfGamesPlayed: 10,
-          noOfGamesWins: 10
-      }
-    },
-    res.render('board', {noOfPlayers : 5, phrase: "Barking on the wrong tree", roomAdmin: roomAdmin})
-    // return res.json({
-    //   status: true,
-    //   added
-    // });
+    const { roomName, noOfPlayers, noOfRounds} = req.body;
+    const noOfMembers =  noOfPlayers%2 == 0 ? noOfPlayers/2 : Math.floor(noOfPlayers/2)+1;
+    let team1 = await Services.createTeam(roomLink+"team1",noOfMembers);
+    const team2 = await Services.createTeam(roomLink+"team2",noOfMembers);
+    team1 = await Services.addMember(team1, roomAdmin)
+    // console.log(team1);
+    // console.log(team2);
+    const room = await Services.createRoom(roomAdmin, roomLink, roomName, noOfPlayers, noOfRounds, team1, team2);
+    console.log(room);
+    res.render('team1Board', {team1: team1, phrase: "Barking on the wrong tree", roomAdmin: roomAdmin})
   } catch (err) {
     console.error(err);
     res.status(500).json('Server error --> ' + err.message);
   }
 });
 
-Router.get("/joinRoom/:roomLink/:userId", async (req,res) => {
+Router.get('/rooms/:userId', async (req, res) => {
+  const rooms = await Services.getRooms();
+  // console.log(rooms[0]);
+  res.render('room', {userId: req.params.userId, rooms: rooms});
+});
+
+Router.get("/joinRoom/:room/:team/:userId", async (req,res) => {
   try {
-    let user = await Services.getUserInfo(req.params.userId);
-    let room = await Services.getRoomInfo(req.params.roomLink);
-    let updatedRoom = await Services.addMember(room, user);
-    res.render('board', {noOfPlayers : 5, phrase: "Barking on the wrong tree", roomAdmin: null})
+    const { roomId, teamId , userId } = req.params;
+    const user = await Services.getUserInfoById(userId);
+    let team = await Services.getTeamInfoById(teamId);
+    team = await Services.addMember(team, user);
+    res.render('team1Board', {team1: null, phrase: "Barking on the wrong tree", roomAdmin: null})
     // return res.json({
     //   status: true,
     //   updatedRoom
