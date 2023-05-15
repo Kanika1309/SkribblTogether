@@ -8,19 +8,19 @@ const Room = new mongoose.Schema({
     roomLink: { type: String, required: true, unique: true },
     noOfPlayers: { type: Number, required: true},
     noOfRounds: { type: Number, required: true},
-    players: [{
-        type: String,
-        ref: 'user'
-    }],
-    // teams: [{ 
+    // players: [{
     //     type: String,
-    //     ref: 'team'
+    //     ref: 'user'
     // }],
+    teams: [{ 
+        type: String,
+        ref: 'team'
+    }],
     // rounds: [{
     //     type: String,
     //     ref: 'round'
     // }],
-    totalScore: Number
+    // totalScore: Number
     // winningTeam: {
     //     type: String,
     //     ref: 'team'

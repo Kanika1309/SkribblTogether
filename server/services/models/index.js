@@ -1,64 +1,70 @@
+const express = require('express');
+const Router = express();
+
+Router.use(express.json({  extended: true }));
+Router.use(express.urlencoded({  extended: true }));
+
 const { UserModel } = require('./schema/user');
 const { TeamModel } = require('./schema/team');
 const { RoomModel } = require('./schema/room');
 const { RoundModel } = require('./schema/round');
 
-let users= [
-    {
-        userName: "0001",
-        password: "user1",
-        rank: 1,
-        history: {
-            noOfGamesPlayed: 10,
-            noOfGamesWins: 10
-        }
-    },
-    {
-        userName: "0002",
-        password: "user2",
-        rank: 2,
-        history: {
-            noOfGamesPlayed: 10,
-            noOfGamesWins: 9
-        }
-    },
-    {
-        userName: "0003",
-        password: "user3",
-        rank: 3,
-        history: {
-            noOfGamesPlayed: 10,
-            noOfGamesWins: 8
-        }
-    },
-    {
-        userName: "0004",
-        password: "user4",
-        rank: 4,
-        history: {
-            noOfGamesPlayed: 10,
-            noOfGamesWins: 7
-        }
-    },
-    {
-        userName: "0005",
-        password: "user5",
-        rank: 5,
-        history: {
-            noOfGamesPlayed: 10,
-            noOfGamesWins: 6
-        }
-    },
-    {
-        userName: "0006",
-        password: "user6",
-        rank: 6,
-        history: {
-            noOfGamesPlayed: 10,
-            noOfGamesWins: 5
-        }
-    }
-]
+// let users= [
+//     {
+//         userName: "0001",
+//         password: "user1",
+//         rank: 1,
+//         history: {
+//             noOfGamesPlayed: 10,
+//             noOfGamesWins: 10
+//         }
+//     },
+//     {
+//         userName: "0002",
+//         password: "user2",
+//         rank: 2,
+//         history: {
+//             noOfGamesPlayed: 10,
+//             noOfGamesWins: 9
+//         }
+//     },
+//     {
+//         userName: "0003",
+//         password: "user3",
+//         rank: 3,
+//         history: {
+//             noOfGamesPlayed: 10,
+//             noOfGamesWins: 8
+//         }
+//     },
+//     {
+//         userName: "0004",
+//         password: "user4",
+//         rank: 4,
+//         history: {
+//             noOfGamesPlayed: 10,
+//             noOfGamesWins: 7
+//         }
+//     },
+//     {
+//         userName: "0005",
+//         password: "user5",
+//         rank: 5,
+//         history: {
+//             noOfGamesPlayed: 10,
+//             noOfGamesWins: 6
+//         }
+//     },
+//     {
+//         userName: "0006",
+//         password: "user6",
+//         rank: 6,
+//         history: {
+//             noOfGamesPlayed: 10,
+//             noOfGamesWins: 5
+//         }
+//     }
+// ]
 
 let rooms = {
         roomAdmin: {
@@ -116,33 +122,26 @@ let phrases = ["Barking on the wrong tree", "Kill two birds with one stone", "Bo
 
 const Services = {
     createUserAccount: (userName, password) => {
-        const add = {
-            userName,
-            password,
-            rank: users.length+1,
-            history: {
-                noOfGamesPlayed: 0,
-                noOfGamesWins: 0
-            } 
-        }
-        users.push(add)
-        return {
-            users
-        }
-        // return UserModel.create({
-        //     userKey, name, rank, history
-        // });
+        return UserModel.create({
+            userName, password
+        });
     },
     getAllUsers: () => {
-        return users;
-        return UserModel.find().lean();
+        return UserModel.find();
     },
     getUserInfo: (userName) => {
-        for(let i in users){
-            if(users[i].userName === userName){
-                return users[i]
-            }
-        }
+        // let users = UserModel.find();
+        // let id;
+        // console.log(users)
+        // for(let user : users){
+        //     if(user.userName === userName){
+        //         id=user._id;
+        //         break;
+        //     }
+        // }
+        // console.log(".....")
+        // console.log(id)
+        return UserModel.findById("64615426af03a42b8dcef52f");
         // return UserModel.findOne({
         //     userName: userName
         // }).lean();

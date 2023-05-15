@@ -2,12 +2,14 @@ const express = require('express');
 const path = require('path');
 const Router = express();
 const { Services } = require('./models');
-const { UserModel } = require('./models/schema/user');
 
-const publicPath = path.join(__dirname + '../' + '../' + '../draw/draw.html');
+Router.use(express.json({  extended: true }));
+Router.use(express.urlencoded({  extended: true }));
+
+// const publicPath = path.join(__dirname + '../' + '../' + '../draw/draw.html');
 
 Router.get('/', async (req,res) => {
-  res.render('home');
+  res.render('home', {check: false});
 })
 
 Router.get("/register", async (req,res) => {
@@ -17,12 +19,13 @@ Router.get("/register", async (req,res) => {
 Router.post('/register', async  (req, res) => {
   try {
     const { userName, password } = req.body;
-    const users = await Services.createUserAccount(userName, password);
-    // res.render('home');
-    return res.json({
-      status: true,
-      users
-    });
+    await Services.createUserAccount(userName, password);
+    const user = await Services.getUserInfo(userName);
+    res.redirect(`/api/${user._id}`);
+    // return res.json({
+    //   status: true,
+    //   users
+    // });
   } catch (err) {
     console.error(err);
     res.status(500).json('Server error --> ' + err.message);
@@ -35,9 +38,10 @@ Router.get("/login", async (req,res) => {
 
 Router.post("/login", async (req,res) => {
   try {
-    // const { userId } = req.body.userId;
-    // const user = await Services.getUserInfo(userId);
-    res.render('home');
+    const { userName } = req.body.userName;
+    const user = await Services.getUserInfo(userName);
+    // console.log(user)
+    res.redirect(`/api/${user._id}`);
     // return res.json(user);
   } catch (err) {
     console.error(err);
@@ -57,6 +61,10 @@ Router.get("/logout", async (req,res) => {
 Router.get('/rooms', async (req, res) => {
   res.render('room');
 });
+
+Router.get('/:userId', async (req,res) => {
+  res.render('home', {check: true});
+})
 
 Router.get('/createRoom/:userId', async (req, res) => {
     res.render('createRoom');

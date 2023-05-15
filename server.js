@@ -1,9 +1,18 @@
 // var sitePath = process.argv[2] || ".";
+const mongoose = require('mongoose');
+const dotenv = require("dotenv");
+dotenv.config({path: './config.env'});
 const port = 7000;
 const express = require("express");
 const { set } = require("./server/services");
 const { setTimeout } = require("timers/promises");
 const app = express();
+
+mongoose.connect(process.env.CONN_STR);
+mongoose.connection.once("open", () => {
+    console.log("DATABASE CONNECTED!");
+});
+
 // const path = require('path');
 app.set('view engine', 'ejs');
 // app.set('views', 'myviews');
