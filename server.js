@@ -48,17 +48,18 @@ app.use(express.static('views'));
 //         }
 //     })
 // });
-let players = []
+let team1players = []
 
-io
+var team1 = io.of('/team1Board');
+team1
     .on("connect", (socket) => {
         // console.log("new ");
-        players.push(socket)
+        team1players.push(socket)
         console.log(`${socket.id} has connected.`)
 
     socket.on("draw", (data) => {
         // console.log(data)
-        players.forEach(con => {
+        team1players.forEach(con => {
             if(con.id !== socket.id){
                 // console.log({x: data.x, y: data.y});
                 // io.of("board.html")
@@ -69,7 +70,7 @@ io
 
     socket.on("down", () => {
         // console.log("down")
-        players.forEach(con => {
+        team1players.forEach(con => {
             if(con.id !== socket.id){
                 // console.log("ondown");
                 // io.of("board.html")
@@ -80,7 +81,7 @@ io
 
     socket.on("up", () => {
         // console.log("up")
-        players.forEach(con => {
+        team1players.forEach(con => {
             if(con.id !== socket.id){
                 // console.log("onup");
                 // io.of("board.html")
@@ -91,7 +92,7 @@ io
 
     socket.on("clear", (data) => {
         let i=0;
-        players.forEach(con => {
+        team1players.forEach(con => {
             if(con.id !== socket.id){
                 // io.of("board.html")
                 return con.emit("onclear", {w: data.w, h: data.h})
@@ -99,7 +100,7 @@ io
         })
     })
     socket.on("start", () => {
-        players.forEach(con => {
+        team1players.forEach(con => {
             if(con.id !== socket.id){
                 // io.of("board.html")
                 return con.emit("start",{})
@@ -107,19 +108,19 @@ io
                 return con.emit("self")
             }
         })
-        io.sockets.emit("timer",{msg: `Players can start drawing!`})
+        team1.emit("timer",{msg: `Players can start drawing!`})
     })
     
     socket.on("submit", () => {
         // console.log("submit")
-        players.forEach(con => {
+        team1players.forEach(con => {
             return con.emit("onsubmit", "Game Over!");
         });
     });
 
     socket.on("disconnect", () => {
         console.log(`${socket.id} has disconnected.`)
-        players = players.filter(con => con.id != socket.id);
+        team1players = team1players.filter(con => con.id != socket.id);
     });
 
     })

@@ -60,7 +60,7 @@
             canvas.width = window.innerWidth - canvasOffsetX;
             canvas.height = window.innerHeight - canvasOffsetY;
             // var io = require("socket.io-client");
-            var io = io.connect();
+            var io = io.connect('/team1Board');
 
             const ctx = canvas.getContext('2d');
 

@@ -102,10 +102,10 @@ Router.get('/rooms/:userId', async (req, res) => {
 
 Router.get("/joinRoom/:room/:team/:userId", async (req,res) => {
   try {
-    const { roomId, teamId , userId } = req.params;
-    const user = await Services.getUserInfoById(userId);
-    let team = await Services.getTeamInfoById(teamId);
-    team = await Services.addMember(team, user);
+    // const { roomId, teamId , userId } = req.params;
+    // const user = await Services.getUserInfoById(userId);
+    // let team = await Services.getTeamInfoById(teamId);
+    // team = await Services.addMember(team, user);
     res.render('team1Board', {team1: null, phrase: "Barking on the wrong tree", roomAdmin: null})
     // return res.json({
     //   status: true,
@@ -120,7 +120,7 @@ Router.get("/joinRoom/:room/:team/:userId", async (req,res) => {
 Router.post('/submit', async(req,res) => {
   try{
     // const { result } = req.body.result;
-    res.render('home');
+    res.redirect('/api/');
   } catch (err) {
     console.error(err);
     res.status(500).json('Server error --> ' + err.message);

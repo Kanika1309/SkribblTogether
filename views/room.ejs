@@ -94,18 +94,18 @@
                     </tr>
                   </thead>
                   <tbody id="room">
-                    <tr>
-                      <% for(var i=0; i<rooms.length; i++) { %>
+                    <% for(var i=0; i<rooms.length; i++) { %>
+                      <tr>
                         <th scope="row"><%=i+1%></th>
                         <td><%=rooms[i].roomName%></td>
-                        <td><a href="/api/joinRoom/<%=rooms[i].id%>/<%=rooms[i].teams[0].id%>/<%=userId%>">
-                          <button id="team" type="" >Join Team 1</button>
+                        <td><a href="/api/joinRoom/<%=rooms[i].id%>/<%=rooms[i].team[0].id%>/<%=userId%>">
+                          <button id="team" type="button" >Join Team 1</button>
                         </a></td>
-                        <td><a href="/api/joinRoom/<%=rooms[i].id%>/<%=rooms[i].teams[1].id%>/<%=userId%>">
-                          <button id="team" type="" >Join Team 2</button>
+                        <td><a href="/api/joinRoom/<%=rooms[i].id%>/<%=rooms[i].team[0].id%>/<%=userId%>">
+                          <button id="team" type="button" >Join Team 2</button>
                         </a></td>
-                      <% } %>
-                    </tr>
+                      </tr>
+                    <% } %>
                   </tbody>
                 </table>
             </table>
