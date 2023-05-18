@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Room = new mongoose.Schema({
     roomAdmin: { 
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
     },
     roomLink: { type: String, required: true, unique: true },
@@ -14,7 +14,7 @@ const Room = new mongoose.Schema({
     //     ref: 'user'
     // }],
     teams: [{ 
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'team'
     }],
     // rounds: [{

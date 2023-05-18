@@ -69,7 +69,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-link" href="/api/">Home</a>
+                    <a class="nav-link" href="/api/<%=userId%>">Home</a>
                     <!-- <a class="nav-link " href="/api/rules">Rules</a>
                     <a class="nav-link " href="/api/profile/:userId">My Profile</a> -->
                 </div>
@@ -98,10 +98,10 @@
                       <tr>
                         <th scope="row"><%=i+1%></th>
                         <td><%=rooms[i].roomName%></td>
-                        <td><a href="/api/joinRoom/<%=rooms[i].id%>/<%=rooms[i].team[0].id%>/<%=userId%>">
+                        <td><a href="/api/joinRoom/<%=rooms[i].id%>/<%=rooms[i].teams[0]%>/<%=userId%>">
                           <button id="team" type="button" >Join Team 1</button>
                         </a></td>
-                        <td><a href="/api/joinRoom/<%=rooms[i].id%>/<%=rooms[i].team[0].id%>/<%=userId%>">
+                        <td><a href="/api/joinRoom/<%=rooms[i].id%>/<%=rooms[i].teams[1]%>/<%=userId%>">
                           <button id="team" type="button" >Join Team 2</button>
                         </a></td>
                       </tr>

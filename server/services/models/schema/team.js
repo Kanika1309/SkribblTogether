@@ -4,7 +4,7 @@ const Team = new mongoose.Schema({
     teamKey: {type: String, required: true, unique: true},
     noOfMembers: {type: Number, required: true},
     members: [{ 
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
     }],
     // teamTotalScore: Number

@@ -9,11 +9,11 @@
 </head>
 <body>
     <div class="members">
-        <% for(var i=0; i<team1.noOfMembers; i++) { %>
+        <% for(var i=0; i<team1.length+1; i++) { %>
             <% if(i==0) { %>
                 <div id="member">Team 1</div>
             <% } else { %>
-                <div id="member"></div>
+                <div id="member"><%= team1[i-1].userName %></div>
             <% } %>
         <% } %>
     </div>
@@ -22,7 +22,7 @@
         <canvas id="drawing-board"></canvas>
     </div>
     <div class="link">
-        <a href="http://localhost:7000/api/board/<%=team1.teamKey%>">ROOM LINK</a>
+        <a><%= roomName %></a>
     </div>
     <div class="input">
         <div id="inputOption">
@@ -33,7 +33,7 @@
             </form>
             <!-- <label for="linewidth">LINEWIDTH</label>
             <input id="linewidth" name='linewidth' type="number" value="5"> -->
-            <% if(roomAdmin!= null) { %>
+            <% if(roomAdmin) { %>
             <button id="start" type="start" formaction="" class="btn btn-success">START</button>
             <% } %>
             <button id="clear" type="clear" >CLEAR</button>

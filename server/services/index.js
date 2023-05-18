@@ -80,14 +80,13 @@ Router.post('/createRoom/:userId', async  (req, res) => {
     const roomLink = await Services.generateRoomLink(req.params.userId);
     const { roomName, noOfPlayers, noOfRounds} = req.body;
     const noOfMembers =  noOfPlayers%2 == 0 ? noOfPlayers/2 : Math.floor(noOfPlayers/2)+1;
-    let team1 = await Services.createTeam(roomLink+"team1",noOfMembers);
+    const team1 = await Services.createTeam(roomLink+"team1",noOfMembers);
     const team2 = await Services.createTeam(roomLink+"team2",noOfMembers);
-    team1 = await Services.addMember(team1, roomAdmin)
     // console.log(team1);
     // console.log(team2);
     const room = await Services.createRoom(roomAdmin, roomLink, roomName, noOfPlayers, noOfRounds, team1, team2);
-    console.log(room);
-    res.render('team1Board', {team1: team1, phrase: "Barking on the wrong tree", roomAdmin: roomAdmin})
+    // console.log(room);
+    res.redirect(`/api/joinRoom/${room._id}/${team1._id}/${roomAdmin._id}`)
   } catch (err) {
     console.error(err);
     res.status(500).json('Server error --> ' + err.message);
@@ -96,17 +95,32 @@ Router.post('/createRoom/:userId', async  (req, res) => {
 
 Router.get('/rooms/:userId', async (req, res) => {
   const rooms = await Services.getRooms();
-  // console.log(rooms[0]);
+  // console.log(rooms);
+  // console.log(rooms[0].teams[0]);
   res.render('room', {userId: req.params.userId, rooms: rooms});
 });
 
-Router.get("/joinRoom/:room/:team/:userId", async (req,res) => {
+Router.get("/joinRoom/:roomId/:teamId/:userId", async (req,res) => {
   try {
-    // const { roomId, teamId , userId } = req.params;
-    // const user = await Services.getUserInfoById(userId);
-    // let team = await Services.getTeamInfoById(teamId);
-    // team = await Services.addMember(team, user);
-    res.render('team1Board', {team1: null, phrase: "Barking on the wrong tree", roomAdmin: null})
+    const { roomId, teamId , userId } = req.params;
+    const user = await Services.getUserInfoById(userId);
+    let team = await Services.getTeamInfoById(teamId);
+    // console.log(team)
+    team = await Services.addMember(team, user);
+    let teamMembers=[]
+    // console.log(team)
+    for(let i=0;i<team.members.length;i++){
+      // console.log(team.members[i])
+      teamMembers.push(await Services.getUserInfoById(team.members[i]));
+    }
+    // console.log(teamMembers)
+    const room = await Services.getRoomInfoById(roomId);
+    let check=0;
+    // console.log(room.roomAdmin)
+    if(room.roomAdmin==userId){
+      check=1;
+    }
+    res.render('team1Board', {team1: teamMembers, phrase: "Barking on the wrong tree", roomAdmin: check, roomName: room.roomName})
     // return res.json({
     //   status: true,
     //   updatedRoom

@@ -37,11 +37,15 @@ const Services = {
         return TeamModel.findById(teamId)
     },
     addMember: (team, user) => {
-        // console.log(team)
+        // console.log(team);
         // console.log(user)
         // console.log(team.members)
-        team.members.push(user)
-        return TeamModel.findOneAndUpdate({_id: team.id}, team);
+        team.members.push(user);
+        const uTeam = team;
+        // console.log(uTeam);
+        const nTeam = TeamModel.findOneAndUpdate({_id: team._id}, uTeam, {new: true});
+        // console.log(nTeam._update);
+        return nTeam;
     },
     createRoom: (roomAdmin, roomLink, roomName, noOfPlayers, noOfRounds, team1, team2) => {
         return RoomModel.create({
@@ -57,10 +61,14 @@ const Services = {
         })
     },
     getRooms: () => {
+        // const rooms = RoomModel.find();
+        // console.log(rooms);
         return RoomModel.find();
     },
     getRoomInfoById: (roomId) => {
-        return RoomModel.findById(roomId)
+        // const room = RoomModel.findById(roomId);
+        // console.log(room)
+        return RoomModel.findById(roomId);
     },
     updateRoomInfo: () => {
         team.members.push(user)

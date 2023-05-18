@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Round = new mongoose.Schema({
     phrase: String,
     guessers: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
     },
     score: Number
