@@ -25,10 +25,9 @@ const Services = {
     generateRoomLink: (userId) => {
         return userId;
     },
-    createTeam: (teamKey, noOfMembers) => {
+    createTeam: (noOfMembers) => {
         let members=[]
         return TeamModel.create({
-            teamKey,
             noOfMembers,
             members
         });

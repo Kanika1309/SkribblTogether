@@ -80,8 +80,8 @@ Router.post('/createRoom/:userId', async  (req, res) => {
     const roomLink = await Services.generateRoomLink(req.params.userId);
     const { roomName, noOfPlayers, noOfRounds} = req.body;
     const noOfMembers =  noOfPlayers%2 == 0 ? noOfPlayers/2 : Math.floor(noOfPlayers/2)+1;
-    const team1 = await Services.createTeam(roomLink+"team1",noOfMembers);
-    const team2 = await Services.createTeam(roomLink+"team2",noOfMembers);
+    const team1 = await Services.createTeam(noOfMembers);
+    const team2 = await Services.createTeam(noOfMembers);
     // console.log(team1);
     // console.log(team2);
     const room = await Services.createRoom(roomAdmin, roomLink, roomName, noOfPlayers, noOfRounds, team1, team2);
