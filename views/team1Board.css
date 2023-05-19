@@ -13,7 +13,7 @@ body{
     height: 40px;
     display: flex
 }
-.members #member {
+.members * {
     position: relative;
     width: 25%;
     border: 0.2px solid black;

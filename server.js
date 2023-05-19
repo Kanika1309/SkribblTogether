@@ -57,6 +57,16 @@ team1
         team1players.push(socket)
         console.log(`${socket.id} has connected.`)
 
+    socket.on("updateMembers", (data) => {
+        team1players.forEach(con => {
+            if(con.id !== socket.id){
+                console.log(data.user)
+                // console.log({x: data.x, y: data.y});
+                // io.of("board.html")
+                return con.emit("onUpdateMembers", {user: data.user})
+            }
+        })
+    }) 
     socket.on("draw", (data) => {
         // console.log(data)
         team1players.forEach(con => {

@@ -107,12 +107,8 @@ Router.get("/joinRoom/:roomId/:teamId/:userId", async (req,res) => {
     let team = await Services.getTeamInfoById(teamId);
     // console.log(team)
     team = await Services.addMember(team, user);
-    let teamMembers=[]
+    const teamMembers = await Services.getTeamMembers(team.members);
     // console.log(team)
-    for(let i=0;i<team.members.length;i++){
-      // console.log(team.members[i])
-      teamMembers.push(await Services.getUserInfoById(team.members[i]));
-    }
     // console.log(teamMembers)
     const room = await Services.getRoomInfoById(roomId);
     let check=0;
@@ -120,7 +116,7 @@ Router.get("/joinRoom/:roomId/:teamId/:userId", async (req,res) => {
     if(room.roomAdmin==userId){
       check=1;
     }
-    res.render('team1Board', {team1: teamMembers, phrase: "Barking on the wrong tree", roomAdmin: check, roomName: room.roomName})
+    res.render('team1Board', {team1: teamMembers, user: user, phrase: "Barking on the wrong tree", roomAdmin: check, roomName: room.roomName})
     // return res.json({
     //   status: true,
     //   updatedRoom

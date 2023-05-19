@@ -47,6 +47,28 @@ const Services = {
         // console.log(nTeam._update);
         return nTeam;
     },
+    getTeamMembers: async (members) => {
+        // console.log("models")
+        // console.log(members)
+        let teamMembers = []
+        for(let i=0;i<members.length;i++){
+            // console.log(members[i])
+            teamMembers.push( await Services.getUserInfoById(members[i]));
+        }
+        // console.log(teamMembers)
+        return teamMembers;
+    },
+    // getMembers: async () => {
+    //     const teams = await TeamModel.find();
+    //     // console.log(teams)
+    //     if(teams.length==0){
+    //         return teams;
+    //     }
+    //     const members = teams[0].members;
+    //     const m = await Services.getTeamMembers(members)
+    //     console.log(m);
+    //     return m;
+    // },
     createRoom: (roomAdmin, roomLink, roomName, noOfPlayers, noOfRounds, team1, team2) => {
         return RoomModel.create({
             roomAdmin,

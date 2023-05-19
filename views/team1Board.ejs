@@ -43,6 +43,7 @@
     <script src="/socket.io/socket.io.js"></script>
     <!-- <script src="/views/app.js"></script> -->
     <script>
+            var members = document.querySelector('.members')
             const canvas = document.getElementById('drawing-board');
             const inputOption = document.getElementById('inputOption');
             const phrase = document.querySelector('.phrase');
@@ -68,6 +69,18 @@
             let lineWidth = 5;
             let startX;
             let startY;
+            
+            var user = <%- JSON.stringify(user) %>;
+            io.emit("updateMembers", {user: user})
+
+            io.on("onUpdateMembers", (data) => {
+                // console.log("team");
+                var newDiv = document.createElement('div');
+                // console.log("inner")
+                newDiv.textContent = data.user.userName;
+                // console.log(newDiv)
+                members.appendChild(newDiv);
+            });
 
             io.on("timer",(data) => {
                 alert(data.msg);
