@@ -58,17 +58,6 @@ const Services = {
         // console.log(teamMembers)
         return teamMembers;
     },
-    // getMembers: async () => {
-    //     const teams = await TeamModel.find();
-    //     // console.log(teams)
-    //     if(teams.length==0){
-    //         return teams;
-    //     }
-    //     const members = teams[0].members;
-    //     const m = await Services.getTeamMembers(members)
-    //     console.log(m);
-    //     return m;
-    // },
     createRoom: (roomAdmin, roomLink, roomName, noOfPlayers, noOfRounds, team1, team2) => {
         return RoomModel.create({
             roomAdmin,
@@ -92,9 +81,13 @@ const Services = {
         // console.log(room)
         return RoomModel.findById(roomId);
     },
-    updateRoomInfo: () => {
-        team.members.push(user)
-        return TeamModel.findOneAndUpdate({_id: team.id}, team);
+    updateRooms: async (roomId, team1, team2) => {
+        // console.log(roomId);
+        // console.log(team1);
+        // console.log(team2);
+        await TeamModel.deleteOne({_id: team1});
+        await TeamModel.deleteOne({_id: team2});
+        await RoomModel.deleteOne({_id: roomId});
     },
     getPhrase: () => { 
         return phrases[getRndInteger(0,phrases.length)]

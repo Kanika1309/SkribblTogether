@@ -60,9 +60,7 @@ team1
     socket.on("updateMembers", (data) => {
         team1players.forEach(con => {
             if(con.id !== socket.id){
-                console.log(data.user)
-                // console.log({x: data.x, y: data.y});
-                // io.of("board.html")
+                // console.log(data.user)
                 return con.emit("onUpdateMembers", {user: data.user})
             }
         })

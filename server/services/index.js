@@ -116,7 +116,7 @@ Router.get("/joinRoom/:roomId/:teamId/:userId", async (req,res) => {
     if(room.roomAdmin==userId){
       check=1;
     }
-    res.render('team1Board', {team1: teamMembers, user: user, phrase: "Barking on the wrong tree", roomAdmin: check, roomName: room.roomName})
+    res.render('team1Board', {team1: teamMembers, user: user, phrase: "Barking on the wrong tree", roomAdmin: check, roomName: room.roomName, roomId: room._id})
     // return res.json({
     //   status: true,
     //   updatedRoom
@@ -127,10 +127,15 @@ Router.get("/joinRoom/:roomId/:teamId/:userId", async (req,res) => {
   }
 });
 
-Router.post('/submit', async(req,res) => {
+Router.post('/submit/:roomId/:userId', async(req,res) => {
   try{
-    // const { result } = req.body.result;
-    res.redirect('/api/');
+    const { roomId, userId} = req.params;
+    const room = await Services.getRoomInfoById(roomId);
+    // console.log(room)
+    if(room!= null && userId == room.roomAdmin){
+      await Services.updateRooms(roomId, room.teams[0], room.teams[1]);
+    }
+    res.redirect(`/api/${userId}`);
   } catch (err) {
     console.error(err);
     res.status(500).json('Server error --> ' + err.message);
@@ -139,25 +144,25 @@ Router.post('/submit', async(req,res) => {
 
 module.exports = Router;
 
-Router.get('/getUsers', async (req, res) => {
-  try {
-    const users = await Services.getAllUsers();
-    return res.json({
-      users: users.map(user => ({
-          userName: user.userName,
-          password: user.password,
-          rank: user.rank,
-          history: {
-            noOfGamesPlayed: user.history.noOfGamesPlayed,
-            noOfGamesWins: user.history.noOfGamesWins,
-          }
-      }))
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json('Server error --> ' + err.message);
-  }
-});
+// Router.get('/getUsers', async (req, res) => {
+//   try {
+//     const users = await Services.getAllUsers();
+//     return res.json({
+//       users: users.map(user => ({
+//           userName: user.userName,
+//           password: user.password,
+//           rank: user.rank,
+//           history: {
+//             noOfGamesPlayed: user.history.noOfGamesPlayed,
+//             noOfGamesWins: user.history.noOfGamesWins,
+//           }
+//       }))
+//     });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json('Server error --> ' + err.message);
+//   }
+// });
 
 // Router.get('/profile/:userId', async (req, res) => {
 // try {
@@ -167,34 +172,4 @@ Router.get('/getUsers', async (req, res) => {
 //   console.error(err);
 //   res.status(500).json('Server error --> ' + err.message);
 // }
-// });
-
-// Router.get('/getRoom/:roomId', async (req, res) => {
-//   try {
-//     const room = await Services.getRoomInfo(req.params.roomId);
-//     return res.json(room);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json('Server error --> ' + err.message);
-//   }
-// });
-
-// Router.get('/joinTeam/:roomId/:teamId/:userId', async (req,res) => {
-//   try{
-//     // console.log(req.params)
-//     const added = await Services.addMember(req.params.roomId, req.params.teamId, req.params.userId);
-//     // if(req.params.teamId === 'team1'){
-//     //   res.sendFile(path.join(__dirname, '../', '../views/board.html'))
-//     // }
-//     // else{
-//     //   res.sendFile(path.join(__dirname, '../', '../views/board.html'))
-//     // }
-//     return res.json({
-//       status: true,
-//       added
-//     });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json('Server error --> ' + err.message);
-//   }
 // });

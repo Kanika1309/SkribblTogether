@@ -26,7 +26,7 @@
     </div>
     <div class="input">
         <div id="inputOption">
-            <form action="/api/submit" method="POST" id="form">
+            <form action="/api/submit/<%= roomId %>/<%= user._id %>" method="POST" id="form">
                 <label id="guessLabel" for="guess">GUESS</label>
                 <input id="guess" type="text" placeholder="Guess the phrase.">
                 <button id="submit" type="submit" visiblity="hidden" class="btn btn-success">SUBMIT</button>
@@ -74,9 +74,7 @@
             io.emit("updateMembers", {user: user})
 
             io.on("onUpdateMembers", (data) => {
-                // console.log("team");
                 var newDiv = document.createElement('div');
-                // console.log("inner")
                 newDiv.textContent = data.user.userName;
                 // console.log(newDiv)
                 members.appendChild(newDiv);
