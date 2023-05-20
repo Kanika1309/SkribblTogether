@@ -5,7 +5,7 @@ const Room = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
     },
-    roomLink: { type: String, required: true, unique: true },
+    roomPassword: { type: String, required: true, unique: true },
     roomName: { type: String, required: true, unique: true },
     noOfPlayers: { type: Number, required: true},
     noOfRounds: { type: Number, required: true},

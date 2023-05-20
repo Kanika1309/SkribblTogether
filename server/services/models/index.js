@@ -22,7 +22,7 @@ const Services = {
     getUserInfoById: (userId) => {
         return UserModel.findById(userId)
     },
-    generateRoomLink: (userId) => {
+    generatePassword: (userId) => {
         return userId;
     },
     createTeam: (noOfMembers) => {
@@ -57,10 +57,10 @@ const Services = {
         // console.log(teamMembers)
         return teamMembers;
     },
-    createRoom: (roomAdmin, roomLink, roomName, noOfPlayers, noOfRounds, team1, team2) => {
+    createRoom: (roomAdmin, roomPassword, roomName, noOfPlayers, noOfRounds, team1, team2) => {
         return RoomModel.create({
             roomAdmin,
-            roomLink,
+            roomPassword,
             roomName, 
             noOfPlayers,
             noOfRounds, 

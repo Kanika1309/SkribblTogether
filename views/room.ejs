@@ -55,6 +55,25 @@
             font-size:medium;
             font-weight:bold;
         }
+        #flashMessage{
+          display: none;
+        }
+        #roomPassword{
+          border: 0.2px solid black;
+          border-width: 2px;
+          margin-top: 1%;
+          background-color:lightgrey;
+          font-size:medium;
+          font-weight:bold;
+        }
+        #join{
+          border: 0.2px solid black;
+          border-width: 2px;
+          margin-top: 1%;
+          background-color:lightgrey;
+          font-size:medium;
+          font-weight:bold;
+        }
     </style>
 
 </head>
@@ -98,71 +117,72 @@
                       <tr>
                         <th scope="row"><%=i+1%></th>
                         <td><%=rooms[i].roomName%></td>
-                        <td><a href="/api/joinRoom/<%=rooms[i].id%>/<%=rooms[i].teams[0]%>/<%=userId%>">
+                        <td>
                           <button id="team" type="button" >Join Team 1</button>
-                        </a></td>
-                        <td><a href="/api/joinRoom/<%=rooms[i].id%>/<%=rooms[i].teams[1]%>/<%=userId%>">
+                          <div id="flashMessage">
+                            <form id="passwordForm" action="/api/joinRoom/<%=rooms[i].id%>/<%=rooms[i].teams[0]%>/<%=userId%>" method="POST">
+                              <input type="password" id="roomPassword" placeholder="Enter your password">
+                              <button id="join" type="submit">Join</button>
+                            </form>
+                          </div>
+                        </td>
+                        <td>
                           <button id="team" type="button" >Join Team 2</button>
-                        </a></td>
+                          <div id="flashMessage">
+                            <form id="passwordForm" action="/api/joinRoom/<%=rooms[i].id%>/<%=rooms[i].teams[0]%>/<%=userId%>" method="POST">
+                              <input type="password" id="roomPassword" placeholder="Enter your password">
+                              <button id="join" type="submit">Join</button>
+                            </form>
+                          </div>
+                        </td>
                       </tr>
                     <% } %>
                   </tbody>
                 </table>
             </table>
-            <!-- <div id="rooms">
-
-            </div>
-            <div id="room">
-
-            </div> -->
         </div>
     </div>
-        <!-- <div class="row">
-            <div class="col width=80%"> -->
-                <!-- <div class="card shadow">
-                    <div class="card-body">
-                        <h5 class="card-title">ROOM</h5>
-                        <table class="table">
-                            <thead>
-                              <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">First</th>
-                                <th scope="col">Last</th>
-                                <th scope="col">Handle</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                              </tr>
-                              <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                              </tr>
-                              <tr>
-                                <th scope="row">3</th>
-                                <td colspan="2">Larry the Bird</td>
-                                <td>@twitter</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                    </div>
-                </div> -->
-            <!-- </div>
-        </div> -->
-    <!-- </div> -->
+    <main class="container mt-5">
+    </main>
+    <footer class="footer bg-dark py-3 mt-auto">
+        <div class="container">
+            <span class="text-muted">&copy; SKRIBBL TOGETHER 2023</span>
+        </div>
+   </footer>
+   <script>
+      const team = document.getElementById('team');
+      const flashMessage = document.getElementById('flashMessage');
+      const passwordForm = document.getElementById('passwordForm');
+      const roomPassword = document.getElementById('roomPassword');
+      const join = document.getElementById('join');
 
-        <main class="container mt-5">
-        </main>
-        <footer class="footer bg-dark py-3 mt-auto">
-            <div class="container">
-                <span class="text-muted">&copy; SKRIBBL TOGETHER 2023</span>
-            </div>
-        </footer>
+      team.addEventListener('click', () => {
+        flashMessage.style.display = 'block';
+      });
+      
+      passwordForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const enteredPassword = roomPassword.value;
+        console.log(enteredPassword);
+        flashMessage.style.display = 'none';
+      });
+
+      join.addEventListener('click', (event) => {
+        event.preventDefault();
+        submitPasswordForm();
+      });
+
+      function submitPasswordForm() {
+        const enteredPassword = roomPassword.value;
+
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'roomPassword';
+        hiddenInput.value = enteredPassword;
+        passwordForm.appendChild(hiddenInput);
+        
+        passwordForm.submit();
+      }
+    </script>
 </body>
 </html>
