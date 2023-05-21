@@ -22,32 +22,6 @@ const io = require("socket.io")(http);
 
 app.use(express.static('views'));
 
-// io.on('connection', function (socket) {
-//     socket.emit("welcome","welcome to socket.io");
-//     console.log("new cliemt is connected")
-// });
-// const { Services } = require('./server/services/models');
-// const gameTeams = ["team1","team2"];
-
-// io
-//     .of("/room")
-//     .on("connection", (socket) => {
-//         // console.log("new ");
-//         socket.emit("welcome", "welcome to socket.io 2");
-
-//     socket.on("joinTeam", (team) => {
-//         if(gameTeams.includes(team)){
-//             socket.join(team);
-//             // broadcast
-//             io
-//                 .of("/room")
-//                 .in(team).emit("newUser", "New Player Joined: "+ team);
-//             return socket.emit("success", "You have successfully joined: " + team);
-//         }else {
-//             return socket.emit("err", "No team named: " + team);
-//         }
-//     })
-// });
 let team1players = []
 
 var team1 = io.of('/team1Board');
@@ -75,7 +49,17 @@ team1
             }
         });
     });
-
+    socket.on("canDraw",(data) => {
+        console.log(hiii);
+        return socket.emit("onCanDraw", {})
+        // team1players.forEach(con => {
+        //     if(con.id == socket.id){
+        //         // console.log({x: data.x, y: data.y});
+        //         // io.of("board.html")
+                
+        //     }
+        // });
+    });
     socket.on("down", () => {
         // console.log("down")
         team1players.forEach(con => {
@@ -107,16 +91,46 @@ team1
             }
         })
     })
+
     socket.on("start", () => {
         team1players.forEach(con => {
             if(con.id !== socket.id){
                 // io.of("board.html")
                 return con.emit("start",{})
             }else{
-                return con.emit("self")
+                return con.emit("self",{})
             }
         })
-        team1.emit("timer",{msg: `Players can start drawing!`})
+        let l=team1players.length;
+        let timeLeft = (l-1) * 10;
+        var timerId = setInterval(countdown, 1000);
+        console.log("timer")
+        function countdown() {
+            if (timeLeft == 0) {
+                clearTimeout(timerId);
+                team1.emit("timeup",{})
+            } else {
+                for(let i=1;i<l;i++){
+                    if(((((i-1)*10)+1) <= timeLeft) && (timeLeft <= (i*10))){
+                        // console.log(i);
+                        for(let j=1;j<l;j++){
+                            if(j==(l-i)){
+                                team1players[j].emit("canDraw");
+                            }else{
+                                team1players[j].emit("canNotDraw");
+                            }
+                        }
+                        // team1.emit("colorChange",{i: l-i+1});
+                    }
+                }
+                if(timeLeft < 10) {
+                    timeLeft = 0 + '' + timeLeft;
+                }
+                team1.emit("timer",{timeLeft: timeLeft})   
+                timeLeft -= 1;
+            }
+        }
+        // team1.emit("timer",{msg: `Players can start drawing!`, team1players: team1players})
     })
     
     socket.on("submit", () => {

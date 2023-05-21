@@ -11,7 +11,7 @@
     <div class="members">
         <% for(var i=0; i<team.length+1; i++) { %>
             <% if(i==0) { %>
-                <div id="member">Team 1</div>
+                <div id="member" style="background-color:lightsteelblue;">Team 1</div>
             <% } else { %>
                 <div id="member"><%= team[i-1].userName %></div>
             <% } %>
@@ -37,7 +37,7 @@
             <button id="start" type="start" formaction="" class="btn btn-success">START</button>
             <% } %>
             <button id="clear" type="clear" >CLEAR</button>
-            <div id="timer" >00:30</div>
+            <div id="timer" >00:00</div>
         </div>
     </div>
     <script src="/socket.io/socket.io.js"></script>
@@ -76,40 +76,45 @@
             io.on("onUpdateMembers", (data) => {
                 var newDiv = document.createElement('div');
                 newDiv.textContent = data.user.userName;
+                newDiv.style.backgroundColor = 'aliceblue';
                 // console.log(newDiv)
                 members.appendChild(newDiv);
             });
 
-            io.on("timer",(data) => {
-                alert(data.msg);
-                var timeLeft = 30;
-                var timerId = setInterval(countdown, 1000);
-                function countdown() {
-                    if (timeLeft == 0) {
-                        clearTimeout(timerId);
-                        timer.innerHTML = 'Time Over';
-                        canvas.style.pointerEvents="none";
-                    } else {
-                        // if(timeLeft<=30 && timeLeft>20){
-                        // }
-                        if(timeLeft < 10) {
-                            timeLeft = 0 + '' + timeLeft;
-                        }
-                            
-                        timer.innerHTML = '00:' + timeLeft;
-                            
-                        timeLeft -= 1;
-                    }
-                }
+            var childDivs = members.querySelectorAll('div');
+            let l=childDivs.length;
+            io.on("timer", (data) => {
+                timer.innerHTML = '00:' + data.timeLeft;
             })
+            io.on("timeup", () => {
+                timer.innerHTML = 'Time Over';
+                canvas.style.pointerEvents="none";
+                clear.style.display="none";
+                members.style.backgroundColor = "aliceblue";
+            })
+            io.on("canDraw", (data) => {
+                canvas.style.pointerEvents="auto";
+                clear.style.display="inline-block";
+            })
+            io.on("canNotDraw", (data) => {
+                canvas.style.pointerEvents="none";
+                clear.style.display="none";
+            })
+            // io.on("colorChange", (data) => {
+            //     for(let c=0;c<l;c++){
+            //         if(c==data.i){
+            //             childDivs[c].style.backgroundColor = "antiquewhite";
+            //         }else{
+            //             childDivs[c].style.backgroundColor = "aliceblue";
+            //         }
+            //     } 
+            // })
             io.on("onclear", ({w, h}) => {
                 ctx.clearRect(0, 0, w, h);
             })
             io.on("start", () => {
                 phrase.style.display="block";
-                clear.style.display="inline-block";
                 timer.style.display="inline-block";
-                canvas.style.pointerEvents="auto";
             })
             io.on("self", () => {
                 start.style.display="none";
