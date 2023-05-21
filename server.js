@@ -35,7 +35,7 @@ team1
         team1players.forEach(con => {
             if(con.id !== socket.id){
                 // console.log(data.user)
-                return con.emit("onUpdateMembers", {user: data.user})
+                return con.emit("onUpdateMembers", {user: data.user, team: data.team})
             }
         })
     }) 
@@ -48,17 +48,6 @@ team1
                 return con.emit("ondraw", {x: data.x, y: data.y})
             }
         });
-    });
-    socket.on("canDraw",(data) => {
-        console.log(hiii);
-        return socket.emit("onCanDraw", {})
-        // team1players.forEach(con => {
-        //     if(con.id == socket.id){
-        //         // console.log({x: data.x, y: data.y});
-        //         // io.of("board.html")
-                
-        //     }
-        // });
     });
     socket.on("down", () => {
         // console.log("down")
@@ -104,7 +93,7 @@ team1
         let l=team1players.length;
         let timeLeft = (l-1) * 10;
         var timerId = setInterval(countdown, 1000);
-        console.log("timer")
+        // console.log("timer")
         function countdown() {
             if (timeLeft == 0) {
                 clearTimeout(timerId);
@@ -112,15 +101,16 @@ team1
             } else {
                 for(let i=1;i<l;i++){
                     if(((((i-1)*10)+1) <= timeLeft) && (timeLeft <= (i*10))){
-                        // console.log(i);
-                        for(let j=1;j<l;j++){
-                            if(j==(l-i)){
-                                team1players[j].emit("canDraw");
-                            }else{
-                                team1players[j].emit("canNotDraw");
+                        if(timeLeft%10==0){
+                            team1.emit("colorChange",{i: l-i+1});
+                            for(let j=0;j<l;j++){
+                                if(j==(l-i)){
+                                    team1players[j].emit("canDraw");
+                                }else{
+                                    team1players[j].emit("canNotDraw");
+                                }
                             }
                         }
-                        // team1.emit("colorChange",{i: l-i+1});
                     }
                 }
                 if(timeLeft < 10) {

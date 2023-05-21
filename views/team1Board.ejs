@@ -11,9 +11,9 @@
     <div class="members">
         <% for(var i=0; i<team.length+1; i++) { %>
             <% if(i==0) { %>
-                <div id="member" style="background-color:lightsteelblue;">Team 1</div>
+                <div id="member" style="background-color:rgb(138, 166, 203);">Team 1</div>
             <% } else { %>
-                <div id="member"><%= team[i-1].userName %></div>
+                <div id="member" style="background-color:lightsteelblue;"><%= team[i-1].userName %></div>
             <% } %>
         <% } %>
     </div>
@@ -37,7 +37,7 @@
             <button id="start" type="start" formaction="" class="btn btn-success">START</button>
             <% } %>
             <button id="clear" type="clear" >CLEAR</button>
-            <div id="timer" >00:00</div>
+            <div id="timer" >Timer</div>
         </div>
     </div>
     <script src="/socket.io/socket.io.js"></script>
@@ -76,13 +76,11 @@
             io.on("onUpdateMembers", (data) => {
                 var newDiv = document.createElement('div');
                 newDiv.textContent = data.user.userName;
-                newDiv.style.backgroundColor = 'aliceblue';
+                newDiv.style.backgroundColor = 'lightsteelblue';
                 // console.log(newDiv)
                 members.appendChild(newDiv);
             });
 
-            var childDivs = members.querySelectorAll('div');
-            let l=childDivs.length;
             io.on("timer", (data) => {
                 timer.innerHTML = '00:' + data.timeLeft;
             })
@@ -90,7 +88,11 @@
                 timer.innerHTML = 'Time Over';
                 canvas.style.pointerEvents="none";
                 clear.style.display="none";
-                members.style.backgroundColor = "aliceblue";
+                var childDivs = members.querySelectorAll('div');
+                let l=childDivs.length;
+                for(let c=1;c<l;c++){
+                    childDivs[c].style.backgroundColor = "lightsteelblue";
+                } 
             })
             io.on("canDraw", (data) => {
                 canvas.style.pointerEvents="auto";
@@ -100,15 +102,20 @@
                 canvas.style.pointerEvents="none";
                 clear.style.display="none";
             })
-            // io.on("colorChange", (data) => {
-            //     for(let c=0;c<l;c++){
-            //         if(c==data.i){
-            //             childDivs[c].style.backgroundColor = "antiquewhite";
-            //         }else{
-            //             childDivs[c].style.backgroundColor = "aliceblue";
-            //         }
-            //     } 
-            // })
+            io.on("colorChange", (data) => {
+                var childDivs = members.querySelectorAll('div');
+                let l=childDivs.length;
+                // console.log(l)
+                for(let c=1;c<l;c++){
+                    // console.log(data.i)
+                    if(c==data.i){
+                        childDivs[c].style.backgroundColor = "rgb(138, 166, 203)";
+                    }else{
+                        // console.log(c)
+                        childDivs[c].style.backgroundColor = "lightsteelblue";
+                    }
+                } 
+            })
             io.on("onclear", ({w, h}) => {
                 ctx.clearRect(0, 0, w, h);
             })
