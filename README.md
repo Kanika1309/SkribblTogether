@@ -11,7 +11,7 @@ between clients and servers.
 2.	User will provide the information regarding the room which includes: room name,  no. of rooms and no. of players in each team.
 3.	System will generate a sharable unique password for that room.
 4.	Each player will join the room using room name and password (he can only join a team that has space).
-5.	Once all the players joined, teams will start playing as follows:
+5.	Once all the players joined, teams will start playing as follows:  <br />
     i.	 System will choose the guesser.
     ii.	 Phrase will be shown to all the players except the guesser.
     iii. The player who has the green sign will start drawing.
