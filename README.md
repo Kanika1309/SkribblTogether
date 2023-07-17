@@ -11,13 +11,13 @@ between clients and servers.
 2.	User will provide the information regarding the room which includes: room name,  no. of rooms and no. of players in each team.
 3.	System will generate a sharable unique password for that room.
 4.	Each player will join the room using room name and password (he can only join a team that has space).
-5.	Once all the players joined, teams will start playing as follows:
+5.	Once all the players joined, teams will start playing as follows:\n
     i.	 System will choose the guesser.
     ii.	 Phrase will be shown to all the players except the guesser.
     iii. The player who has the green sign will start drawing.
     iv.	 Guesser will guess the phrase. 
-6.	System will display the overall score after each round for all the teams.
+7.	System will display the overall score after each round for all the teams.
 (score will be decided by the factor: time taken)
-7.	Players will decide whether to continue or not after every round.
-8.	Winner will be decided according to the total score at last.
-9.	Rank of each player will be decided by the factor: number of times his team wins when he played in a team.
+8.	Players will decide whether to continue or not after every round.
+9.	Winner will be decided according to the total score at last.
+10.	Rank of each player will be decided by the factor: number of times his team wins when he played in a team.
