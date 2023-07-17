@@ -6,7 +6,7 @@ pass the drawing one after another in order to complete it.
 between clients and servers.
 * Tech Used - HTML , CSS , JavaScript, NodeJS, MongoDB, Express
 
-Steps:
+# Steps:
 1.	User will generate the room.
 2.	User will provide the information regarding the room which includes: room name,  no. of rooms and no. of players in each team.
 3.	System will generate a sharable unique password for that room.
